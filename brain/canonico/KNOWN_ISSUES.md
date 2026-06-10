@@ -6,7 +6,7 @@ status: canonico
 
 # Known Issues
 
-Nenhum bug funcional registrado na fundacao, dominio, APIs backend ou engine.
+Nenhum bug funcional registrado na fundacao, dominio, APIs backend, engine ou fundacao frontend.
 
 ## Limitacoes Atuais
 
@@ -18,3 +18,4 @@ Nenhum bug funcional registrado na fundacao, dominio, APIs backend ou engine.
 - Se `backend/.env` local existir com `DB_CONNECTION=sqlite`, o servidor HTTP Docker pode autenticar contra banco errado. Alinhar `.env` local ao `.env.example` antes de smoke HTTP.
 - O versionamento imutavel da Fase 3B usa endpoint explicito `/draft`; update direto em publicado e recusado com 422.
 - A tabela `instance_steps` possui apenas `assigned_to`; para steps por role/multiplos aprovadores, a Fase 3C deixa `assigned_to=null` e resolve os aprovadores dinamicamente a partir de `step_approvers` no momento da decisao.
+- `ng build` com Tailwind CSS v4 ainda pode emitir um aviso de otimizacao CSS sobre uma regra base aninhada do preflight (`& -> Empty sub-selector`). O build termina com exit code 0 e o smoke Playwright confirmou CSS aplicado no Chromium.

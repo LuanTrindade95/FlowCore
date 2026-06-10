@@ -8,7 +8,7 @@
 | Fase 3A - Backend Auth + RBAC | DONE | Branch `feature/backend-auth-rbac`; commits `89a2059`, `9320b0e`, `adb131f`; Sanctum login/logout/me, JSON error shape, CORS, policies e testes de RBAC validados. |
 | Fase 3B - Backend Workflow Definition API | DONE | Branch `feature/workflow-definition-api`; commits `e874247`, `e98390c`; CRUD de definicoes/sub-recursos, GraphValidator, publish/versioning e leitura completa validados. |
 | Fase 3C - Backend Workflow Engine | DONE | Branch `feature/workflow-engine`; commits `8f865a9`, `57fc540`, `73918ca`; services de engine, sandbox de condicoes, endpoints de requests/inbox/decisions, quorum, rejeicao, version pin e smoke concorrente HTTP validados. |
-| Fase 4A - Frontend Fundacao | PENDING | - |
+| Fase 4A - Frontend Fundacao | DONE | Branch `feature/frontend-foundation`; commits `3284038`, `e09ce7f`, `d7cda5a`; auth com signals, interceptors, guards, UI kit, shell responsivo, login real e smoke Playwright desktop/mobile validados. |
 | Fase 4B - Frontend Builder Visual + Form Builder | PENDING | - |
 | Fase 4C - Frontend Runtime | PENDING | - |
 | Fase 5 - Escalonamento, Automacoes + Realtime | PENDING | - |

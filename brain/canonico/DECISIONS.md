@@ -133,3 +133,21 @@ Por que: isso permite fluxos com revisao/correcao quando configurados, mas prese
 Decisao: processar decisoes com transacao e `lockForUpdate` no `InstanceStep`, revalidando estado e duplicidade depois do lock.
 
 Por que: steps com quorum nao podem aceitar duas decisoes simultaneas que dobrem contadores ou fechem o mesmo step duas vezes.
+
+## 2026-06-10 - Token frontend em memoria
+
+Decisao: manter o Bearer token somente em memoria no `AuthService`, sem persistencia em `localStorage`.
+
+Por que: reduz exposicao de credencial no browser enquanto o projeto ainda nao tem cookie httpOnly/BFF ou refresh token.
+
+## 2026-06-10 - Estado frontend com Signals
+
+Decisao: usar Angular Signals para autenticacao, loading e feedback, sem adicionar NgRx ao FlowCore.
+
+Por que: a Fase 4A precisa de estado simples e previsivel; store global seria custo sem necessidade concreta.
+
+## 2026-06-10 - Playwright para smoke visual
+
+Decisao: adicionar `@playwright/test` como dev dependency para validar login e shell autenticado em Chromium desktop/mobile.
+
+Por que: a fundacao frontend precisa de evidencia visual reproduzivel, nao apenas typecheck/build.

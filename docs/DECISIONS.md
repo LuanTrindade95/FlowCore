@@ -244,3 +244,51 @@ Executar decisoes dentro de transacao e recarregar o `InstanceStep` com `lockFor
 - Submissoes concorrentes fecham o step apenas uma vez.
 - O segundo request contra step ja fechado recebe erro de dominio em vez de alterar contadores.
 - A auditoria preserva uma decisao persistida para quorum 1, confirmada por smoke HTTP concorrente.
+
+## ADR-14 - Token frontend somente em memoria
+
+### Contexto
+
+A Fase 4A precisava consumir a API Sanctum Bearer sem introduzir ainda uma estrategia de cookie httpOnly, BFF ou refresh token. Persistir token em `localStorage` aumentaria a janela de exposicao em caso de XSS.
+
+### Decisao
+
+Guardar o `access_token` apenas em memoria no `AuthService`, usando Angular Signals para estado autenticado. Refresh da pagina exige novo login nesta fase.
+
+### Consequencias
+
+- Reduz persistencia de credencial no browser.
+- Simplifica o MVP da SPA sem inventar fluxo de refresh.
+- A experiencia de sessao persistente pode ser reavaliada em hardening futuro com cookie httpOnly/BFF se o projeto evoluir para producao real.
+
+## ADR-15 - Estado frontend com Signals, sem NgRx
+
+### Contexto
+
+O frontend da Fase 4A precisa de estado simples para usuario autenticado, loading e feedback. A aplicacao ainda nao tem grafo visual, runtime complexo ou cache client-side amplo que justifique store global pesada.
+
+### Decisao
+
+Usar Angular Signals e servicos de feature/core para estado local de autenticacao, loading e toasts. Nao adicionar NgRx ao FlowCore.
+
+### Consequencias
+
+- Mantem a base Angular pequena e direta.
+- Evita boilerplate antes de haver necessidade real de store.
+- Features futuras podem compor Signals/RxJS por dominio sem acoplar toda a SPA a um store global.
+
+## ADR-16 - Playwright como verificador visual local
+
+### Contexto
+
+A Fase 4A exige smoke manual de login e shell autenticado. Sem uma ferramenta de browser exposta na sessao, a validacao visual precisava ser reproduzivel por comando.
+
+### Decisao
+
+Adicionar `@playwright/test` como dev dependency e usar Chromium headless para smoke local de login, dashboard e navegacao mobile.
+
+### Consequencias
+
+- A auditoria visual deixa de depender apenas de inspecao manual.
+- A Fase 6 pode evoluir para E2E formais sem trocar ferramenta.
+- A auditoria completa de dependencias dev continua separada de `npm audit --omit=dev`, pois o toolchain frontend pode carregar avisos dev-only.

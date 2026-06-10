@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes e engine backend de workflow implementadas e validadas localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow e fundacao frontend autenticada implementadas e validadas localmente.
 
 Existe no repositorio:
 
@@ -56,6 +56,15 @@ Existe no repositorio:
   - suporte a approval modes `any`, `all` e `quorum`
   - rejeicao roteada por transition `rejected` quando existir, ou terminal `rejected` quando nao existir
   - transacao e `lockForUpdate` em decisoes para proteger quorum contra concorrencia
+- Frontend Fundacao da Fase 4A:
+  - Angular standalone com rotas lazy por feature
+  - AuthService com Signals e token somente em memoria
+  - interceptors de auth, loading e erro JSON
+  - guards funcionais de autenticacao e permissao
+  - UI kit base: button, input/select, card, status pill, modal, toast, data table, timeline, empty state e skeleton
+  - shell SaaS light-enterprise com sidebar desktop e bottom nav mobile
+  - tela `/login` com reactive form, validacao, loading e erro
+  - Playwright dev dependency para smoke visual local
 
 Ainda nao existe:
 
@@ -83,11 +92,14 @@ Ainda nao existe:
 - A Fase 3C definiu que a engine executa apenas definicoes publicadas e fixa `definition_version` na abertura.
 - A Fase 3C definiu que expressoes condicionais avaliam somente variaveis de `workflow_instances.data`.
 - A Fase 3C definiu que decisoes concorrentes sao serializadas por transacao e lock pessimista no step.
+- A Fase 4A definiu token frontend somente em memoria, sem `localStorage`.
+- A Fase 4A definiu Signals como estrategia de estado frontend, sem NgRx.
+- A Fase 4A adicionou Playwright para smoke visual local de login/shell.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: fechamento e auditoria da Fase 3C na branch `feature/workflow-engine`.
+- Fase atual: fechamento e auditoria da Fase 4A na branch `feature/frontend-foundation`.
 
 ## Bloqueios
 
