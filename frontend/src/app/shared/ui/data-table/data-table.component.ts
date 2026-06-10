@@ -22,7 +22,7 @@ export type DataTableRow = Record<string, string | number>;
         </thead>
         <tbody class="divide-y divide-slate-100 text-slate-700">
           @for (row of rows; track trackRow($index)) {
-            <tr class="hover:bg-slate-50">
+            <tr>
               @for (column of columns; track column.key) {
                 <td class="px-4 py-3">{{ row[column.key] }}</td>
               }

@@ -50,7 +50,7 @@ interface ShellNavItem {
         <nav class="mt-8 space-y-1">
           @for (item of visibleNavItems(); track item.route) {
             <a
-              class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+              class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600"
               routerLinkActive="bg-blue-50 text-blue-700"
               [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
               [routerLink]="item.route"
@@ -85,7 +85,7 @@ interface ShellNavItem {
 
             <div class="flex items-center gap-3">
               <app-status-pill label="12 pendências" tone="warning" />
-              <button class="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-50" type="button" aria-label="Notificações">
+              <button class="rounded-lg border border-slate-200 p-2 text-slate-500" type="button" aria-label="Notificações">
                 <svg lucideBell class="h-4 w-4"></svg>
               </button>
               <div class="hidden text-right sm:block">
@@ -100,10 +100,37 @@ interface ShellNavItem {
           </div>
         </header>
 
-        <div class="px-4 py-6 sm:px-6">
+        <div class="px-4 py-6 pb-24 sm:px-6 lg:pb-6">
           <router-outlet />
         </div>
       </section>
+
+      <nav class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-slate-200 bg-white px-2 py-2 shadow-lg lg:hidden">
+        @for (item of visibleNavItems(); track item.route) {
+          <a
+            class="flex flex-col items-center gap-1 rounded-lg px-2 py-2 text-xs font-medium text-slate-500"
+            routerLinkActive="bg-blue-50 text-blue-700"
+            [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+            [routerLink]="item.route"
+          >
+            @switch (item.route) {
+              @case ('/dashboard') {
+                <svg lucideLayoutDashboard class="h-4 w-4"></svg>
+              }
+              @case ('/workflows') {
+                <svg lucideWorkflow class="h-4 w-4"></svg>
+              }
+              @case ('/requests') {
+                <svg lucideClipboardList class="h-4 w-4"></svg>
+              }
+              @case ('/inbox') {
+                <svg lucideInbox class="h-4 w-4"></svg>
+              }
+            }
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
     </main>
   `,
 })

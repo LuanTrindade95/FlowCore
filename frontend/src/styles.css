@@ -1,6 +1,20 @@
-@import "tailwindcss";
+@import "tailwindcss" source("./app");
 
 @theme {
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Manrope", "Inter", system-ui, sans-serif;
+  --color-graphite: #111827;
+  --color-process-blue: #2563eb;
+  --color-emerald-flow: #10b981;
+  --color-surface: #f9fafb;
+  --color-neutral: #d1d5db;
+  --color-soft-blue: #93c5fd;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+}
+
+:root {
   --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
   --font-display: "Manrope", "Inter", system-ui, sans-serif;
   --color-graphite: #111827;
