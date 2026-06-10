@@ -3,7 +3,7 @@ export type WorkflowStepType = 'approval' | 'task' | 'condition' | 'automation' 
 export type TransitionEvent = 'approved' | 'rejected' | 'completed' | 'failed' | 'timeout';
 export type ApprovalMode = 'any' | 'all' | 'quorum';
 export type AssigneeType = 'user' | 'role' | 'department' | 'requester_manager';
-export type FormFieldType = 'text' | 'number' | 'select' | 'date' | 'textarea' | 'boolean';
+export type FormFieldType = 'text' | 'number' | 'select' | 'date' | 'textarea' | 'bool';
 
 export interface WorkflowDefinition {
   id: number;

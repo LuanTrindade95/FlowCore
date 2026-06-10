@@ -135,7 +135,7 @@ import { moveField, parseSelectOptions, toFormFieldPayload } from './workflow-fo
                         }
                       </select>
                     }
-                    @case ('boolean') {
+                    @case ('bool') {
                       <div class="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700">
                         <input type="checkbox" /> Sim
                       </div>
@@ -159,7 +159,7 @@ export class WorkflowFormBuilderPageComponent {
   private readonly toast = inject(ToastService);
   private readonly workflowId = Number(this.route.snapshot.paramMap.get('id'));
 
-  protected readonly fieldTypes: FormFieldType[] = ['text', 'number', 'select', 'date', 'textarea', 'boolean'];
+  protected readonly fieldTypes: FormFieldType[] = ['text', 'number', 'select', 'date', 'textarea', 'bool'];
   protected readonly workflow = signal<WorkflowDefinition | null>(null);
   protected readonly selectedFieldId = signal<number | null>(null);
   protected readonly saving = signal(false);
@@ -275,7 +275,7 @@ export class WorkflowFormBuilderPageComponent {
       select: 'Selecao',
       date: 'Data',
       textarea: 'Texto longo',
-      boolean: 'Sim/Nao',
+      bool: 'Sim/Nao',
     };
 
     return labels[type];
