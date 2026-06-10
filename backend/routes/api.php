@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\FormFieldController;
 use App\Http\Controllers\Api\V1\StepApproverController;
+use App\Http\Controllers\Api\V1\WorkflowDecisionController;
 use App\Http\Controllers\Api\V1\WorkflowDefinitionController;
+use App\Http\Controllers\Api\V1\WorkflowRequestController;
 use App\Http\Controllers\Api\V1\WorkflowStepController;
 use App\Http\Controllers\Api\V1\WorkflowTransitionController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +20,14 @@ Route::prefix('v1')->group(function () {
         Route::get('authorization/workflows-manage-smoke', fn () => response()->json([
             'message' => 'Permissao validada.',
         ]))->middleware('permission:workflows.manage');
+
+        Route::get('inbox', [WorkflowRequestController::class, 'inbox']);
+        Route::get('requests', [WorkflowRequestController::class, 'index']);
+        Route::post('requests', [WorkflowRequestController::class, 'store']);
+        Route::get('requests/{request}', [WorkflowRequestController::class, 'show']);
+        Route::post('requests/{workflowRequest}/steps/{step}/decide', [WorkflowDecisionController::class, 'decide']);
+        Route::post('requests/{workflowRequest}/steps/{step}/reassign', [WorkflowDecisionController::class, 'reassign']);
+        Route::post('requests/{workflowRequest}/steps/{step}/comment', [WorkflowDecisionController::class, 'comment']);
 
         Route::middleware('permission:workflows.manage')->group(function () {
             Route::apiResource('workflows', WorkflowDefinitionController::class);
