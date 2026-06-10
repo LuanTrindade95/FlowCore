@@ -261,7 +261,7 @@ class WorkflowEngine
             $fieldRules[] = match ($field->type) {
                 FormFieldType::Text, FormFieldType::Textarea => 'string',
                 FormFieldType::Number => 'numeric',
-                FormFieldType::Select => Rule::in($field->options ?? []),
+                FormFieldType::Select => Rule::in($field->normalizedOptions() ?? []),
                 FormFieldType::Date => 'date_format:Y-m-d',
                 FormFieldType::Boolean => 'boolean',
             };

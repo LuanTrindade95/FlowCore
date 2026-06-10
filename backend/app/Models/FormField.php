@@ -37,4 +37,22 @@ class FormField extends Model
     {
         return $this->belongsTo(WorkflowDefinition::class, 'workflow_definition_id');
     }
+
+    /**
+     * @return list<string>|null
+     */
+    public function normalizedOptions(): ?array
+    {
+        $options = $this->options;
+
+        if (is_array($options) && isset($options['options']) && is_array($options['options'])) {
+            $options = $options['options'];
+        }
+
+        if (! is_array($options)) {
+            return null;
+        }
+
+        return array_values(array_filter($options, 'is_string'));
+    }
 }

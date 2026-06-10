@@ -48,7 +48,9 @@ class DemoWorkflowSeeder extends Seeder
         $this->createField($purchase, 'amount', 'Valor da compra', FormFieldType::Number, true, 1);
         $this->createField($purchase, 'supplier', 'Fornecedor', FormFieldType::Text, true, 2);
         $this->createField($purchase, 'cost_center', 'Centro de custo', FormFieldType::Select, true, 3, [
-            'options' => ['Tecnologia', 'Operacoes', 'Financeiro'],
+            'Tecnologia',
+            'Operacoes',
+            'Financeiro',
         ]);
 
         $this->createTransition($purchase, $purchaseManager, $purchaseFinance, TransitionEvent::Approved, 'amount > 1000');

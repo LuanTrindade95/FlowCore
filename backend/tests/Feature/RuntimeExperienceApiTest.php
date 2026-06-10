@@ -100,6 +100,24 @@ it('lists only the latest published workflow version with ordered form schema', 
         ->and($response->json('data.0.id'))->not->toBe($old->id);
 });
 
+it('normalizes legacy nested select options for runtime clients', function () {
+    $requester = runtimeUser('requester');
+    $definition = runtimeDefinition('legacy-options');
+    FormField::create([
+        'workflow_definition_id' => $definition->id,
+        'key' => 'cost_center',
+        'label' => 'Centro de custo',
+        'type' => FormFieldType::Select,
+        'required' => true,
+        'options' => ['options' => ['Tecnologia', 'Financeiro']],
+        'order' => 1,
+    ]);
+
+    $this->actingAs($requester)->getJson('/api/v1/runtime/workflows')
+        ->assertOk()
+        ->assertJsonPath('data.0.form_fields.0.options', ['Tecnologia', 'Financeiro']);
+});
+
 it('isolates requester lists and details while allowing view-all users', function () {
     $requesterA = runtimeUser('requester');
     $requesterB = runtimeUser('requester');
