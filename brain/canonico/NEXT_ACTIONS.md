@@ -8,25 +8,24 @@ status: canonico
 
 ## Ordem Recomendada
 
-1. Concluir auditoria independente da Fase 1 contra `docs/VISION.md`, `docs/PROGRESS.md`, `README.md`, Docker Compose, CI e o pacote operacional FlowCore.
-2. Se a Fase 1 for aprovada, executar Fase 2 - Dominio e Dados:
-   - lado Definition
-   - lado Runtime
-   - state machines
-   - RBAC seed
-   - factories e seeders
+1. Concluir auditoria da Fase 2 contra `docs/VISION.md`, `docs/PROGRESS.md`, migrations, models, seeders e testes.
+2. Se a Fase 2 for aprovada, executar Fase 3A - Backend Auth + RBAC:
+   - Sanctum login/logout/me
+   - formato JSON padrao de erro
+   - policies baseadas em permissions
+   - API Resource de usuario sem hash
 3. Manter uma branch por fase e commits granulares.
 4. Atualizar `docs/DECISIONS.md`, `docs/PROGRESS.md` e o Brain no fechamento de cada fase.
-5. Nao criar endpoints de produto antes da modelagem validada da Fase 2.
+5. Nao implementar engine, builder ou runtime antes das fases especificas.
 
 ## Primeira Sessao Recomendada
 
-Fase 1 ja foi implementada na branch `feature/platform-foundation`.
+Fase 2 ja foi implementada na branch `feature/domain-data-model`.
 
 Evidencias esperadas antes de avancar:
 
-- checks backend e frontend verdes
-- Docker Compose com backend, frontend, MySQL, Redis, Horizon e Reverb validado
-- nenhuma entidade de dominio criada antes da Fase 2
+- `php artisan migrate:fresh --seed` no MySQL Docker verde
+- Pest cobrindo state machines validas/invalidas e permissao requester
+- smoke de transicao valida/invalida no runtime real
 - ADRs e progresso atualizados
 - veredicto `APROVADO` do verificador

@@ -74,3 +74,45 @@ Usar:
 - O canvas visual parte de uma biblioteca especializada, reduzindo risco de reinventar grafo/arraste/conectores.
 - O realtime fica alinhado ao ecossistema Laravel/Reverb.
 - A escolha de icones evita dependencia depreciada ainda na fundacao.
+
+## ADR-05 - Separacao Definition vs Runtime com version pin
+
+### Contexto
+
+O FlowCore precisa permitir que administradores publiquem definicoes de workflow e que instancias ja abertas continuem presas a versao em que nasceram. Misturar dados de definicao com execucao criaria risco de alterar processos em andamento quando uma definicao fosse editada no futuro.
+
+### Decisao
+
+Separar o dominio em dois lados:
+
+- Definition: `workflow_definitions`, `workflow_steps`, `step_approvers`, `workflow_transitions` e `form_fields`.
+- Runtime: `workflow_instances`, `instance_steps`, `instance_step_decisions` e `workflow_actions`.
+
+Cada `workflow_instance` guarda `workflow_definition_id` e `definition_version`.
+
+### Consequencias
+
+- Instancias podem ser auditadas contra a versao de definicao usada na abertura.
+- A publicacao/versionamento da Fase 3B tera uma base explicita.
+- Consultas de runtime ficam separadas das tabelas de configuracao do builder.
+
+## ADR-06 - Maquinas de estado fixas para instancia e step
+
+### Contexto
+
+O grafo de workflow e dirigido por dados, mas o ciclo de vida de uma instancia e de um step deve ser pequeno, previsivel e testavel. Estados livres em banco aumentariam risco de transicoes impossiveis e bugs silenciosos na engine.
+
+### Decisao
+
+Modelar estados com enums PHP e transicoes fixas:
+
+- Instancia: `running -> approved|rejected|cancelled|completed`.
+- Step: `pending -> in_progress|skipped|escalated`; `in_progress -> approved|rejected|skipped|escalated|completed`; `escalated -> in_progress|approved|rejected|completed`.
+
+Transicao invalida lanca `InvalidWorkflowStateTransition`.
+
+### Consequencias
+
+- A Fase 3C pode focar na engine `start/decide/advance`, reutilizando invariantes de estado ja testadas.
+- Testes conseguem provar transicoes validas e invalidas sem depender de endpoints.
+- O dominio evita aceitar status arbitrario por acidente.

@@ -67,3 +67,21 @@ Por que: Jest simplifica execucao local e CI, reduz atrito de testes no portfoli
 Decisao: instalar `@foblex/flow` para canvas de workflow, `laravel-echo`/`pusher-js` para realtime e `@lucide/angular` para icones.
 
 Por que: essas escolhas alinham a fundacao com as fases futuras de builder visual, execucao realtime e interface profissional, evitando dependencia de pacote de icones depreciado.
+
+## 2026-06-10 - Separacao Definition vs Runtime
+
+Decisao: separar tabelas de definicao (`workflow_definitions`, `workflow_steps`, `step_approvers`, `workflow_transitions`, `form_fields`) das tabelas de runtime (`workflow_instances`, `instance_steps`, `instance_step_decisions`, `workflow_actions`).
+
+Por que: definicoes sao configuracao/versionamento; runtime e execucao/auditoria. Separar reduz acoplamento e protege instancias em andamento contra mudancas futuras no builder.
+
+## 2026-06-10 - Version pin em workflow_instances
+
+Decisao: persistir `definition_version` em cada `workflow_instance`.
+
+Por que: a instancia precisa preservar a versao da definicao usada no inicio do processo, mesmo que a definicao seja editada/publicada novamente em fases futuras.
+
+## 2026-06-10 - State machines fixas em codigo
+
+Decisao: usar enums PHP e metodos `transitionTo()` nos models `WorkflowInstance` e `InstanceStep`, lancando excecao em transicao invalida.
+
+Por que: o grafo do workflow e dado, mas o ciclo de vida de instancia/step e regra fixa do dominio. Isso cria uma base simples e testavel para a engine.

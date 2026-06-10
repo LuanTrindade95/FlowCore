@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica inicial implementada e validada localmente.
+O projeto esta com a fundacao tecnica inicial e a modelagem de dominio/dados implementadas e validadas localmente.
 
 Existe no repositorio:
 
@@ -28,10 +28,15 @@ Existe no repositorio:
 - Frontend Angular 19 standalone em `frontend/`.
 - Infra local com Docker Compose, MySQL 8, Redis 7, Horizon, Reverb e frontend.
 - CI inicial em `.github/workflows/ci.yml`.
+- Dominio Laravel da Fase 2:
+  - tabelas Definition: `workflow_definitions`, `workflow_steps`, `step_approvers`, `workflow_transitions`, `form_fields`
+  - tabelas Runtime: `workflow_instances`, `instance_steps`, `instance_step_decisions`, `workflow_actions`
+  - enums, models, relationships, casts e state machines fixas
+  - RBAC seed com `admin`, `approver`, `requester`
+  - dados demo com 2 workflows publicados e 10 instancias variadas
 
 Ainda nao existe:
 
-- Modelagem de dominio implementavel em migrations/models.
 - Arquitetura tecnica detalhada fora da visao inicial.
 - Fluxos completos do produto fora do roadmap faseado.
 - Backlog tecnico.
@@ -48,11 +53,13 @@ Ainda nao existe:
 - O pacote externo `03-flowcore-prompts.md` esta sendo usado como roadmap operacional faseado, com auditoria a cada fase.
 - A Fase 1 criou a fundacao sem entidades de dominio, mantendo `Definition` e `Runtime` para a Fase 2.
 - Docker Compose e CI sao as referencias de execucao para PHP 8.3, MySQL e Redis.
+- A Fase 2 separou Definition e Runtime em schema proprio; instancias guardam `definition_version`.
+- State machines de instancia e step sao fixas em codigo; o grafo continua sendo dado para a engine futura.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: fechamento e auditoria da Fase 1 na branch `feature/platform-foundation`.
+- Fase atual: fechamento e auditoria da Fase 2 na branch `feature/domain-data-model`.
 
 ## Bloqueios
 
@@ -62,4 +69,4 @@ Nenhum bloqueio tecnico registrado.
 
 > [!todo] A CONFIRMAR: owner oficial a ser usado no front-matter dos documentos canonicos. Valor inicial usado: `LuanTrindade95`.
 
-> [!todo] A CONFIRMAR: modelagem implementavel de `WorkflowDefinition`, `WorkflowStep`, `WorkflowTransition`, `StepApprover`, `WorkflowInstance`, `InstanceStep`, `InstanceStepDecision` e `WorkflowAction` durante a Fase 2.
+> [!todo] A CONFIRMAR: politica final de publicacao/versionamento imutavel durante a Fase 3B.
