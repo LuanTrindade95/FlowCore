@@ -84,12 +84,15 @@ import {
                         Sim
                       </span>
                     }
+                    @case ('number') {
+                      <input appInput type="number" [formControlName]="field.key" [attr.aria-label]="field.label" />
+                    }
                     @default {
                       <input
                         appInput
                         [formControlName]="field.key"
                         [attr.aria-label]="field.label"
-                        [type]="field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'"
+                        [type]="field.type === 'date' ? 'date' : 'text'"
                       />
                     }
                   }
