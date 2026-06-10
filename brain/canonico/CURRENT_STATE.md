@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada e builder visual/form builder implementados e validados localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder e experiencia runtime implementados e validados localmente.
 
 Existe no repositorio:
 
@@ -72,6 +72,20 @@ Existe no repositorio:
   - persistencia de steps, approvers, transitions e form fields via APIs da Fase 3B
   - publish usando o backend como autoridade, exibindo `errors.graph` 422 e destacando problemas por node/transition
   - form builder com reorder persistido e preview de campos
+- Backend Runtime Experience da Fase 4C:
+  - catalogo das versoes publicadas mais recentes e schema de formulario normalizado
+  - escopo de visibilidade de instancias aplicado no backend
+  - lista com filtros de status, workflow, ownership e periodo
+  - detalhe, inbox, assignees e dashboard com recursos enriquecidos e flags de acao
+  - validacao runtime de campos obrigatorios, tipos, datas, booleanos, selects e chaves desconhecidas
+- Frontend Runtime da Fase 4C:
+  - rotas `/requests`, `/requests/new`, `/requests/:id`, `/inbox` e `/dashboard`
+  - formulario reativo gerado pelo schema publicado, incluindo erros 422 do backend
+  - filtros de solicitacoes persistidos em query parameters
+  - detalhe com dados enviados e linha do tempo de auditoria
+  - inbox com progresso any/all/quorum e acoes condicionadas pelas flags da API
+  - dashboard com pendencias, atrasos, instancias ativas, throughput e volume por workflow
+  - E2E local validou solicitacao `#72`, aprovacao do gestor e avanco para aprovacao financeira
 
 Ainda nao existe:
 
@@ -104,11 +118,14 @@ Ainda nao existe:
 - A Fase 4A adicionou Playwright para smoke visual local de login/shell.
 - A Fase 4B definiu que o canvas Foblex e superficie visual; o estado de dominio e serializacao continuam na feature Angular e na API Laravel.
 - A Fase 4B definiu que validacao de grafo para publicacao vem do backend, com UI apenas renderizando `errors.graph` e highlights.
+- A Fase 4C definiu que o schema publicado dirige o formulario runtime, mas a engine sempre revalida o payload.
+- A Fase 4C definiu que visibilidade e flags de acao sao autoridade do backend, nao da navegacao Angular.
+- A Fase 4C definiu query parameters como fonte de verdade dos filtros da lista de solicitacoes.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: Fase 4B auditada na branch `feature/frontend-builder`; proxima fase planejada e Fase 4C - Frontend Runtime.
+- Fase atual: Fase 4C auditada na branch `feature/runtime-experience`; proxima fase planejada e Fase 5 - Escalonamento, Automacoes + Realtime.
 
 ## Bloqueios
 

@@ -324,3 +324,35 @@ No publish, o frontend chama `POST /api/v1/workflows/{id}/publish` e usa `errors
 - O backend permanece a autoridade para validade do grafo.
 - A UI mostra feedback contextual sem aceitar grafo que a engine recusaria.
 - Novas regras de publish podem ser adicionadas no backend com baixo acoplamento no frontend, desde que preservem o shape de erro.
+
+## ADR-19 - Runtime dirigido pelo schema publicado e visibilidade no backend
+
+### Contexto
+
+A experiencia runtime precisa gerar formularios a partir da definicao publicada e impedir que solicitantes consultem instancias de outros usuarios. Repetir schemas no Angular ou filtrar apenas na interface criaria divergencia e exposicao de dados.
+
+### Decisao
+
+Expor catalogo runtime somente com a versao publicada mais recente, validar o payload novamente na engine e aplicar `WorkflowInstance::visibleTo()` nas consultas de lista, detalhe e dashboard. Recursos runtime retornam contexto de definicao, solicitante, steps, actions e flags de acao calculadas pelas policies.
+
+### Consequencias
+
+- O formulario Angular segue o schema publicado sem manter uma copia paralela.
+- Autorizacao e escopo permanecem no backend, independentemente da rota acessada no frontend.
+- Opcoes select legadas sao normalizadas na fronteira do model/resource para preservar compatibilidade.
+
+## ADR-20 - Filtros de solicitacoes persistidos na URL
+
+### Contexto
+
+Filtros de status, workflow, ownership e periodo precisam sobreviver a navegacao e permitir compartilhamento de uma visao operacional.
+
+### Decisao
+
+Usar query parameters como fonte de verdade dos filtros da lista de solicitacoes. O componente inicializa o formulario pela URL e atualiza a navegacao ao aplicar filtros.
+
+### Consequencias
+
+- Filtros ficam reproduziveis, navegaveis e testaveis.
+- A lista nao depende de store global para estado efemero.
+- Novos filtros devem manter compatibilidade com o contrato da API e com URLs existentes.

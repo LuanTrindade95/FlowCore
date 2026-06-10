@@ -10,6 +10,6 @@
 | Fase 3C - Backend Workflow Engine | DONE | Branch `feature/workflow-engine`; commits `8f865a9`, `57fc540`, `73918ca`; services de engine, sandbox de condicoes, endpoints de requests/inbox/decisions, quorum, rejeicao, version pin e smoke concorrente HTTP validados. |
 | Fase 4A - Frontend Fundacao | DONE | Branch `feature/frontend-foundation`; commits `3284038`, `e09ce7f`, `d7cda5a`; auth com signals, interceptors, guards, UI kit, shell responsivo, login real e smoke Playwright desktop/mobile validados. |
 | Fase 4B - Frontend Builder Visual + Form Builder | DONE | Branch `feature/frontend-builder`; lista/versionamento, canvas Foblex, painel de steps/transitions/approvers, form builder, publish com erros 422 destacados, Jest, build e smoke Playwright validados. |
-| Fase 4C - Frontend Runtime | PENDING | - |
+| Fase 4C - Frontend Runtime | DONE | Branch `feature/runtime-experience`; commits `fda4335`, `d0cc8e6`, `52d93f1`, `23ee6a6`, `070e026`, `0d5f750`, `12ed4aa`; APIs runtime seguras, formulario dinamico, lista/detalhe, inbox, dashboard, 34 testes backend, 23 testes frontend, build e E2E solicitante/aprovador validados. |
 | Fase 5 - Escalonamento, Automacoes + Realtime | PENDING | - |
 | Fase 6 - Polish & Vitrine | PENDING | - |

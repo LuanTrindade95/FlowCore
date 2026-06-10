@@ -163,3 +163,21 @@ Por que: o canvas nao deve virar fonte de verdade do workflow; ele renderiza e f
 Decisao: renderizar `errors.graph` retornado pelo backend no publish e destacar nodes/transitions por `meta.step_id` e `meta.transition_id`.
 
 Por que: duplicar o `GraphValidator` no Angular criaria divergencia; o frontend deve orientar o usuario sem substituir a autoridade do backend.
+
+## 2026-06-10 - Schema publicado como contrato do formulario runtime
+
+Decisao: gerar o formulario de abertura pelo schema da versao publicada mais recente e revalidar todo payload na engine.
+
+Por que: evita schema duplicado no Angular e mantem o backend como autoridade para tipos, obrigatoriedade e opcoes permitidas.
+
+## 2026-06-10 - Visibilidade runtime aplicada no backend
+
+Decisao: centralizar o escopo de instancias visiveis no model/policies e retornar flags de acao calculadas pela autorizacao e estado atual.
+
+Por que: esconder links no frontend nao protege dados nem decisoes; lista, detalhe, dashboard e inbox precisam de enforcement server-side consistente.
+
+## 2026-06-10 - Filtros operacionais na URL
+
+Decisao: persistir filtros da lista de solicitacoes em query parameters.
+
+Por que: URLs reproduziveis melhoram navegacao, compartilhamento, testes e eliminam a necessidade de store global para estado efemero.
