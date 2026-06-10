@@ -9,4 +9,4 @@ Fila FIFO de lacunas que precisam ser confirmadas para manter o Brain fiel ao pr
 - [ ] Decidir se o pacote operacional de prompts deve ser versionado dentro do repositorio ou continuar como referencia externa em `Downloads`.
 - [ ] Definir backlog tecnico inicial antes da implementacao.
 - [ ] Confirmar como Obsidian sera usado na pratica: apenas templates dentro do repositorio ou tambem vault/configuracao local fora do Git.
-- [ ] Documentar comandos de setup e execucao depois que Angular, Laravel e Docker forem inicializados.
+- [ ] Decidir se vulnerabilidades dev-only apontadas por `npm audit` completo devem ser tratadas na Fase 6 ou aceitas enquanto `npm audit --omit=dev` estiver limpo.

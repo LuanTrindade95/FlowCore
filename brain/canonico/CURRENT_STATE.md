@@ -12,11 +12,11 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta em fase greenfield, com ideia validada e arquitetura conceitual definida.
+O projeto esta com a fundacao tecnica inicial implementada e validada localmente.
 
 Existe no repositorio:
 
-- `README.md` inicial com o nome do projeto.
+- `README.md` com stack, estrutura, comandos e regras iniciais.
 - `LICENSE` MIT.
 - `.gitattributes`.
 - Dev Brain inicial em `brain/`.
@@ -24,14 +24,16 @@ Existe no repositorio:
   - `docs/VISION.md`
   - `docs/DECISIONS.md`
   - `docs/PROGRESS.md`
+- Backend Laravel 12 em `backend/`.
+- Frontend Angular 19 standalone em `frontend/`.
+- Infra local com Docker Compose, MySQL 8, Redis 7, Horizon, Reverb e frontend.
+- CI inicial em `.github/workflows/ci.yml`.
 
 Ainda nao existe:
 
-- Codigo-fonte da aplicacao.
 - Modelagem de dominio implementavel em migrations/models.
 - Arquitetura tecnica detalhada fora da visao inicial.
 - Fluxos completos do produto fora do roadmap faseado.
-- Documentacao de implementacao.
 - Backlog tecnico.
 
 ## Contexto Confirmado
@@ -44,11 +46,13 @@ Ainda nao existe:
 - Obsidian tambem sera usado para aprendizado, conceitos, ADRs, arquitetura, duvidas, evolucao tecnica, comparacoes entre projetos e preparacao para entrevistas.
 - `docs/VISION.md` define o escopo MVP, a separacao Definition vs Runtime, o mapa de telas, riscos tecnicos e o brand kit light-first.
 - O pacote externo `03-flowcore-prompts.md` esta sendo usado como roadmap operacional faseado, com auditoria a cada fase.
+- A Fase 1 criou a fundacao sem entidades de dominio, mantendo `Definition` e `Runtime` para a Fase 2.
+- Docker Compose e CI sao as referencias de execucao para PHP 8.3, MySQL e Redis.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: Prompt 0 concluido localmente na branch `docs/flowcore-vision`.
+- Fase atual: fechamento e auditoria da Fase 1 na branch `feature/platform-foundation`.
 
 ## Bloqueios
 

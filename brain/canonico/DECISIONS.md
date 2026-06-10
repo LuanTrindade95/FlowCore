@@ -43,3 +43,27 @@ Por que: o projeto precisa de uma fonte versionada para escopo, stack, separacao
 Decisao: usar o pacote operacional FlowCore como guia faseado de execucao, com auditoria por fase antes de avancar.
 
 Por que: o FlowCore tem alto risco arquitetural na engine de workflow; dividir em fases com evidencias evita conclusoes apenas estruturais e protege consistencia de portfolio.
+
+## 2026-06-10 - Monorepo com Docker Compose e CI
+
+Decisao: organizar o projeto em monorepo com `backend/`, `frontend/`, `docker/`, `docker-compose.yml` e CI inicial.
+
+Por que: o FlowCore precisa demonstrar maturidade full stack sem fragmentar a avaliacao tecnica em multiplos repositorios antes do produto existir.
+
+## 2026-06-10 - Docker como runtime de referencia
+
+Decisao: usar Docker Compose como referencia local para PHP 8.3, MySQL, Redis, Horizon, Reverb, backend e frontend.
+
+Por que: o host atual roda PHP 8.2.26, mas o projeto alvo e PHP 8.3. Docker reduz divergencia de ambiente e valida os servicos reais da stack.
+
+## 2026-06-10 - Jest no frontend Angular
+
+Decisao: substituir o alvo Karma/Jasmine por Jest com `jest-preset-angular`.
+
+Por que: Jest simplifica execucao local e CI, reduz atrito de testes no portfolio e mantem feedback rapido para componentes e servicos Angular.
+
+## 2026-06-10 - Pacotes base do builder visual e realtime
+
+Decisao: instalar `@foblex/flow` para canvas de workflow, `laravel-echo`/`pusher-js` para realtime e `@lucide/angular` para icones.
+
+Por que: essas escolhas alinham a fundacao com as fases futuras de builder visual, execucao realtime e interface profissional, evitando dependencia de pacote de icones depreciado.

@@ -8,29 +8,25 @@ status: canonico
 
 ## Ordem Recomendada
 
-1. Executar Fase 1 - Fundacao do monorepo:
-   - `/backend` Laravel 12
-   - `/frontend` Angular 19
-   - Docker Compose
-   - CI
-   - localizacao pt-BR
-2. Auditar Fase 1 contra `docs/VISION.md`, `docs/PROGRESS.md` e o pacote operacional FlowCore.
-3. Executar Fase 2 - Dominio e Dados:
+1. Concluir auditoria independente da Fase 1 contra `docs/VISION.md`, `docs/PROGRESS.md`, `README.md`, Docker Compose, CI e o pacote operacional FlowCore.
+2. Se a Fase 1 for aprovada, executar Fase 2 - Dominio e Dados:
    - lado Definition
    - lado Runtime
    - state machines
    - RBAC seed
    - factories e seeders
-4. Manter uma branch por fase e commits granulares.
-5. Atualizar `docs/DECISIONS.md`, `docs/PROGRESS.md` e o Brain no fechamento de cada fase.
+3. Manter uma branch por fase e commits granulares.
+4. Atualizar `docs/DECISIONS.md`, `docs/PROGRESS.md` e o Brain no fechamento de cada fase.
+5. Nao criar endpoints de produto antes da modelagem validada da Fase 2.
 
 ## Primeira Sessao Recomendada
 
-Iniciar Fase 1 somente apos o Prompt 0 estar auditado e fechado.
+Fase 1 ja foi implementada na branch `feature/platform-foundation`.
 
-Saida esperada:
+Evidencias esperadas antes de avancar:
 
-- monorepo com Laravel, Angular, Docker e CI
-- build e checks basicos executados
+- checks backend e frontend verdes
+- Docker Compose com backend, frontend, MySQL, Redis, Horizon e Reverb validado
 - nenhuma entidade de dominio criada antes da Fase 2
-- ADRs iniciais registrados
+- ADRs e progresso atualizados
+- veredicto `APROVADO` do verificador
