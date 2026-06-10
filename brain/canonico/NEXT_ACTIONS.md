@@ -8,34 +8,29 @@ status: canonico
 
 ## Ordem Recomendada
 
-1. Definir dominio completo do Workflow Engine:
-   - `Workflow`
-   - `Step`
-   - `Transition`
-   - `Condition`
-   - `Execution`
-   - `Approval`
-2. Criar documentacao arquitetural:
-   - visao geral
-   - regras de negocio
-   - fluxos principais
-   - limites de modulo
-   - eventos e filas
-3. Criar `VISION.md` com proposito, publico-alvo, proposta de valor, diferenciais e criterios de sucesso.
-4. Criar pacote de prompts do projeto, seguindo o padrao usado no NexusReserve.
-5. Criar backlog tecnico inicial.
-6. Iniciar implementacao da base do projeto.
+1. Executar Fase 1 - Fundacao do monorepo:
+   - `/backend` Laravel 12
+   - `/frontend` Angular 19
+   - Docker Compose
+   - CI
+   - localizacao pt-BR
+2. Auditar Fase 1 contra `docs/VISION.md`, `docs/PROGRESS.md` e o pacote operacional FlowCore.
+3. Executar Fase 2 - Dominio e Dados:
+   - lado Definition
+   - lado Runtime
+   - state machines
+   - RBAC seed
+   - factories e seeders
+4. Manter uma branch por fase e commits granulares.
+5. Atualizar `docs/DECISIONS.md`, `docs/PROGRESS.md` e o Brain no fechamento de cada fase.
 
 ## Primeira Sessao Recomendada
 
-Produzir a modelagem de dominio inicial do Workflow Engine antes de criar codigo.
+Iniciar Fase 1 somente apos o Prompt 0 estar auditado e fechado.
 
 Saida esperada:
 
-- entidades principais
-- agregados e responsabilidades
-- estados possiveis
-- transicoes permitidas
-- eventos de dominio
-- regras de aprovacao
-- lacunas e perguntas abertas
+- monorepo com Laravel, Angular, Docker e CI
+- build e checks basicos executados
+- nenhuma entidade de dominio criada antes da Fase 2
+- ADRs iniciais registrados

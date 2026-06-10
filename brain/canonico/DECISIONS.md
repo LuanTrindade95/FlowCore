@@ -31,3 +31,15 @@ Por que: o objetivo do FlowCore nao e apenas resolver aprovacoes; ele deve comun
 Decisao: documentacao oficial sera versionada no Git em Markdown, com Obsidian usado como apoio de aprendizado e navegacao.
 
 Por que: Markdown + Git garantem portabilidade, diff e rastreabilidade. Obsidian melhora navegacao humana, backlinks e organizacao conceitual sem virar dependencia obrigatoria do projeto.
+
+## 2026-06-10 - VISION como fonte formal inicial
+
+Decisao: criar `docs/VISION.md`, `docs/DECISIONS.md` e `docs/PROGRESS.md` como documentos formais iniciais do FlowCore.
+
+Por que: o projeto precisa de uma fonte versionada para escopo, stack, separacao Definition vs Runtime, riscos tecnicos, fases e ADRs antes de iniciar codigo de aplicacao.
+
+## 2026-06-10 - Roadmap operacional por fases auditadas
+
+Decisao: usar o pacote operacional FlowCore como guia faseado de execucao, com auditoria por fase antes de avancar.
+
+Por que: o FlowCore tem alto risco arquitetural na engine de workflow; dividir em fases com evidencias evita conclusoes apenas estruturais e protege consistencia de portfolio.

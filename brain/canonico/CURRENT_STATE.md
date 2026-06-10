@@ -20,16 +20,19 @@ Existe no repositorio:
 - `LICENSE` MIT.
 - `.gitattributes`.
 - Dev Brain inicial em `brain/`.
+- Documentos formais iniciais em `docs/`:
+  - `docs/VISION.md`
+  - `docs/DECISIONS.md`
+  - `docs/PROGRESS.md`
 
 Ainda nao existe:
 
 - Codigo-fonte da aplicacao.
-- Modelagem de dominio detalhada.
-- Arquitetura tecnica detalhada.
-- Fluxos completos do produto.
+- Modelagem de dominio implementavel em migrations/models.
+- Arquitetura tecnica detalhada fora da visao inicial.
+- Fluxos completos do produto fora do roadmap faseado.
 - Documentacao de implementacao.
 - Backlog tecnico.
-- Pacote de prompts de execucao.
 
 ## Contexto Confirmado
 
@@ -39,11 +42,13 @@ Ainda nao existe:
 - O projeto deve demonstrar senioridade arquitetural por meio de State Machine, Event Driven Architecture, filas, scheduler, auditoria e modelagem de dominio.
 - Documentacao oficial vive em Markdown versionado no Git.
 - Obsidian tambem sera usado para aprendizado, conceitos, ADRs, arquitetura, duvidas, evolucao tecnica, comparacoes entre projetos e preparacao para entrevistas.
+- `docs/VISION.md` define o escopo MVP, a separacao Definition vs Runtime, o mapa de telas, riscos tecnicos e o brand kit light-first.
+- O pacote externo `03-flowcore-prompts.md` esta sendo usado como roadmap operacional faseado, com auditoria a cada fase.
 
 ## Em Progresso
 
-- Bootstrap do Dev Brain do projeto.
-- Preparacao da base documental para orientar modelagem de dominio, arquitetura e implementacao.
+- Execucao auditada das fases do FlowCore a partir do pacote de prompts.
+- Fase atual: Prompt 0 concluido localmente na branch `docs/flowcore-vision`.
 
 ## Bloqueios
 
@@ -53,6 +58,4 @@ Nenhum bloqueio tecnico registrado.
 
 > [!todo] A CONFIRMAR: owner oficial a ser usado no front-matter dos documentos canonicos. Valor inicial usado: `LuanTrindade95`.
 
-> [!todo] A CONFIRMAR: modelagem detalhada de `Workflow`, `Step`, `Transition`, `Condition`, `Execution` e `Approval`.
-
-> [!todo] A CONFIRMAR: conteudo completo do brand kit citado no contexto inicial.
+> [!todo] A CONFIRMAR: modelagem implementavel de `WorkflowDefinition`, `WorkflowStep`, `WorkflowTransition`, `StepApprover`, `WorkflowInstance`, `InstanceStep`, `InstanceStepDecision` e `WorkflowAction` durante a Fase 2.
