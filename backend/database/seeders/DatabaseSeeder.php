@@ -3,21 +3,34 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(RbacSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@demo.com'],
+            ['name' => 'Admin Demo', 'password' => 'password']
+        )->assignRole('admin');
+
+        User::firstOrCreate(
+            ['email' => 'approver@demo.com'],
+            ['name' => 'Aprovador Demo', 'password' => 'password']
+        )->assignRole('approver');
+
+        User::firstOrCreate(
+            ['email' => 'requester@demo.com'],
+            ['name' => 'Solicitante Demo', 'password' => 'password']
+        )->assignRole('requester');
+
+        User::factory(7)->create()->each(fn (User $user) => $user->assignRole(fake()->randomElement([
+            'approver',
+            'requester',
+        ])));
+
+        $this->call(DemoWorkflowSeeder::class);
     }
 }
