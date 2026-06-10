@@ -97,3 +97,15 @@ Por que: a SPA Angular precisa de um contrato simples para autenticar requests d
 Decisao: padronizar erros de API em `{ message, code, errors? }` para validacao, autenticacao, autorizacao e HTTP errors comuns.
 
 Por que: o frontend consegue tratar 401, 403, 422 e erros de formulario sem depender de mensagens soltas ou respostas HTML.
+
+## 2026-06-10 - Validacao de grafo no publish
+
+Decisao: drafts podem estar incompletos, mas `POST /api/v1/workflows/{id}/publish` roda `GraphValidator` para validar start unico, alcance de steps, ausencia de ciclos, caminho para terminal e sintaxe de condicoes.
+
+Por que: a engine deve receber apenas definicoes publicadas estruturalmente executaveis; erros de builder devem aparecer antes do runtime.
+
+## 2026-06-10 - Nova versao draft por endpoint explicito
+
+Decisao: update direto em definicao publicada retorna 422; evoluir uma publicada exige `POST /api/v1/workflows/{id}/draft`, que clona grafo e form schema para nova versao draft.
+
+Por que: evita efeito colateral escondido em operacoes de update e preserva auditoria/versionamento imutavel.

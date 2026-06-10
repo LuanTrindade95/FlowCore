@@ -140,3 +140,43 @@ Usar Laravel Sanctum com tokens Bearer para `/api/v1/auth/login`, `/api/v1/auth/
 - O frontend pode tratar login, sessao expirada, falta de permissao e validacao sem parsing fragil.
 - Policies e middleware `permission:*` usam as permissions seedadas na Fase 2.
 - A estrategia de armazenamento do token no frontend ainda sera decidida na Fase 4A.
+
+## ADR-08 - Validacao de grafo na publicacao
+
+### Contexto
+
+O builder visual pode persistir drafts incompletos durante a edicao, mas uma definicao publicada precisa ser executavel pela engine futura. Publicar grafo invalido deslocaria erro estrutural para o runtime.
+
+### Decisao
+
+Executar `GraphValidator` em `POST /api/v1/workflows/{id}/publish`, agregando erros em 422 quando houver:
+
+- zero ou mais de uma etapa inicial
+- etapa nao alcancavel a partir do start
+- ciclo no grafo
+- etapa sem caminho para terminal
+- `condition_expression` com sintaxe invalida no `symfony/expression-language`
+
+As condicoes sao apenas parseadas nesta fase; avaliacao booleana fica para a engine da Fase 3C.
+
+### Consequencias
+
+- Drafts continuam flexiveis para o builder.
+- Publicacao passa a ser o gate estrutural oficial.
+- A engine futura recebe definicoes com invariantes minimas garantidas.
+
+## ADR-09 - Versionamento imutavel por draft explicito
+
+### Contexto
+
+Definicoes publicadas devem ser imutaveis para nao alterar instancias futuras ou em andamento de forma silenciosa. Ao mesmo tempo, o administrador precisa evoluir um fluxo publicado.
+
+### Decisao
+
+Atualizacao direta de definicao publicada retorna 422. Para evoluir um fluxo, usar `POST /api/v1/workflows/{id}/draft`, que clona a definicao publicada para uma nova versao `draft` com steps, approvers, transitions e form fields.
+
+### Consequencias
+
+- A versao publicada permanece auditavel e intacta.
+- O builder edita somente drafts.
+- O contrato da API evita efeitos colaterais escondidos em uma tentativa de update.

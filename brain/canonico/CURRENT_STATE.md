@@ -41,6 +41,13 @@ Existe no repositorio:
   - middleware de permissao Spatie registrado
   - policies base para definitions, instances e decisions
   - formato JSON padrao para erros de API
+- Backend Workflow Definition API da Fase 3B:
+  - CRUD de `/api/v1/workflows`
+  - sub-recursos de steps, transitions, step approvers e form fields
+  - leitura completa da definicao com grafo e schema de formulario
+  - `GraphValidator` no publish
+  - definicoes publicadas imutaveis
+  - `POST /api/v1/workflows/{id}/draft` para nova versao draft
 
 Ainda nao existe:
 
@@ -63,11 +70,13 @@ Ainda nao existe:
 - A Fase 2 separou Definition e Runtime em schema proprio; instancias guardam `definition_version`.
 - State machines de instancia e step sao fixas em codigo; o grafo continua sendo dado para a engine futura.
 - A Fase 3A usa Sanctum Bearer token para API; armazenamento do token no frontend sera decidido na Fase 4A.
+- A Fase 3B definiu que drafts podem ser incompletos, mas publicacao valida grafo e condicoes por parse.
+- A Fase 3B definiu que editar publicado diretamente retorna 422; nova versao exige endpoint explicito de draft.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: fechamento e auditoria da Fase 3A na branch `feature/backend-auth-rbac`.
+- Fase atual: fechamento e auditoria da Fase 3B na branch `feature/workflow-definition-api`.
 
 ## Bloqueios
 
@@ -77,4 +86,4 @@ Nenhum bloqueio tecnico registrado.
 
 > [!todo] A CONFIRMAR: owner oficial a ser usado no front-matter dos documentos canonicos. Valor inicial usado: `LuanTrindade95`.
 
-> [!todo] A CONFIRMAR: politica final de publicacao/versionamento imutavel durante a Fase 3B.
+> [!todo] A CONFIRMAR: politica de rejeicao da engine na Fase 3C: encerrar instancia imediatamente ou rotear para revisao quando houver transition de rejected.

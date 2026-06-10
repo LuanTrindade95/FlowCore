@@ -16,3 +16,4 @@ Nenhum bug funcional registrado na fundacao.
 - `npm audit --omit=dev` esta limpo; auditoria completa do npm ainda pode apontar vulnerabilidades em dependencias dev do toolchain Angular/Jest.
 - `tinker --execute` com comandos multi-statement e variaveis teve conflito de quoting no PowerShell; smoke equivalente foi executado via bootstrap PHP dentro do container.
 - Se `backend/.env` local existir com `DB_CONNECTION=sqlite`, o servidor HTTP Docker pode autenticar contra banco errado. Alinhar `.env` local ao `.env.example` antes de smoke HTTP.
+- O versionamento imutavel da Fase 3B usa endpoint explicito `/draft`; update direto em publicado e recusado com 422.
