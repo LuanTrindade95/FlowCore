@@ -85,3 +85,15 @@ Por que: a instancia precisa preservar a versao da definicao usada no inicio do 
 Decisao: usar enums PHP e metodos `transitionTo()` nos models `WorkflowInstance` e `InstanceStep`, lancando excecao em transicao invalida.
 
 Por que: o grafo do workflow e dado, mas o ciclo de vida de instancia/step e regra fixa do dominio. Isso cria uma base simples e testavel para a engine.
+
+## 2026-06-10 - Sanctum Bearer token para API
+
+Decisao: implementar login/logout/me em `/api/v1/auth/*` com Laravel Sanctum e Bearer tokens.
+
+Por que: a SPA Angular precisa de um contrato simples para autenticar requests de API. A decisao de armazenamento do token no frontend fica para a Fase 4A.
+
+## 2026-06-10 - Formato JSON padrao de erro
+
+Decisao: padronizar erros de API em `{ message, code, errors? }` para validacao, autenticacao, autorizacao e HTTP errors comuns.
+
+Por que: o frontend consegue tratar 401, 403, 422 e erros de formulario sem depender de mensagens soltas ou respostas HTML.

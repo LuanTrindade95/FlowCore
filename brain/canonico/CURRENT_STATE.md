@@ -34,6 +34,13 @@ Existe no repositorio:
   - enums, models, relationships, casts e state machines fixas
   - RBAC seed com `admin`, `approver`, `requester`
   - dados demo com 2 workflows publicados e 10 instancias variadas
+- Backend Auth/RBAC da Fase 3A:
+  - `/api/v1/auth/login`
+  - `/api/v1/auth/logout`
+  - `/api/v1/auth/me`
+  - middleware de permissao Spatie registrado
+  - policies base para definitions, instances e decisions
+  - formato JSON padrao para erros de API
 
 Ainda nao existe:
 
@@ -55,11 +62,12 @@ Ainda nao existe:
 - Docker Compose e CI sao as referencias de execucao para PHP 8.3, MySQL e Redis.
 - A Fase 2 separou Definition e Runtime em schema proprio; instancias guardam `definition_version`.
 - State machines de instancia e step sao fixas em codigo; o grafo continua sendo dado para a engine futura.
+- A Fase 3A usa Sanctum Bearer token para API; armazenamento do token no frontend sera decidido na Fase 4A.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: fechamento e auditoria da Fase 2 na branch `feature/domain-data-model`.
+- Fase atual: fechamento e auditoria da Fase 3A na branch `feature/backend-auth-rbac`.
 
 ## Bloqueios
 

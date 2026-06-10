@@ -116,3 +116,27 @@ Transicao invalida lanca `InvalidWorkflowStateTransition`.
 - A Fase 3C pode focar na engine `start/decide/advance`, reutilizando invariantes de estado ja testadas.
 - Testes conseguem provar transicoes validas e invalidas sem depender de endpoints.
 - O dominio evita aceitar status arbitrario por acidente.
+
+## ADR-07 - Sanctum token API e formato JSON padrao
+
+### Contexto
+
+O frontend Angular consumira uma API REST versionada. A Fase 3A precisava entregar autenticacao real, autorizacao baseada em RBAC e respostas JSON previsiveis para erros 401, 403 e 422.
+
+### Decisao
+
+Usar Laravel Sanctum com tokens Bearer para `/api/v1/auth/login`, `/api/v1/auth/logout` e `/api/v1/auth/me`. Padronizar erros de API no formato:
+
+```json
+{
+  "message": "Mensagem em pt-BR.",
+  "code": "ERROR_CODE",
+  "errors": {}
+}
+```
+
+### Consequencias
+
+- O frontend pode tratar login, sessao expirada, falta de permissao e validacao sem parsing fragil.
+- Policies e middleware `permission:*` usam as permissions seedadas na Fase 2.
+- A estrategia de armazenamento do token no frontend ainda sera decidida na Fase 4A.

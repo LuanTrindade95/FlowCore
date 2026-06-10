@@ -43,6 +43,16 @@ cd backend
 php artisan about
 ```
 
+Se `backend/.env` existir localmente, mantenha os valores de banco alinhados ao Docker:
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_DATABASE=flowcore
+DB_USERNAME=flowcore
+DB_PASSWORD=flowcore
+```
+
 Frontend:
 
 ```powershell
