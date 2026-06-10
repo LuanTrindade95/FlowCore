@@ -84,7 +84,7 @@ interface ShellNavItem {
             </div>
 
             <div class="flex items-center gap-3">
-              <app-status-pill label="12 pendências" tone="warning" />
+              <app-status-pill label="Runtime ativo" tone="success" />
               <button class="rounded-lg border border-slate-200 p-2 text-slate-500" type="button" aria-label="Notificações">
                 <svg lucideBell class="h-4 w-4"></svg>
               </button>

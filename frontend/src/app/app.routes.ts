@@ -48,14 +48,31 @@ export const routes: Routes = [
       },
       {
         path: 'requests',
+        pathMatch: 'full',
+        canActivate: [permissionGuard],
+        data: { permissions: ['requests.create', 'requests.decide', 'requests.view-all'] },
         loadComponent: () =>
-          import('./features/requests/requests-foundation.page').then((m) => m.RequestsFoundationPageComponent),
+          import('./features/requests/requests-list.page').then((m) => m.RequestsListPageComponent),
+      },
+      {
+        path: 'requests/new',
+        canActivate: [permissionGuard],
+        data: { permissions: ['requests.create'] },
+        loadComponent: () =>
+          import('./features/runtime/request-new/request-new.page').then((m) => m.RequestNewPageComponent),
+      },
+      {
+        path: 'requests/:id',
+        canActivate: [permissionGuard],
+        data: { permissions: ['requests.create', 'requests.decide', 'requests.view-all'] },
+        loadComponent: () =>
+          import('./features/requests/request-detail.page').then((m) => m.RequestDetailPageComponent),
       },
       {
         path: 'inbox',
         canActivate: [permissionGuard],
         data: { permissions: ['requests.decide', 'requests.view-all'] },
-        loadComponent: () => import('./features/inbox/inbox-foundation.page').then((m) => m.InboxFoundationPageComponent),
+        loadComponent: () => import('./features/inbox/inbox.page').then((m) => m.InboxPageComponent),
       },
       {
         path: '',
