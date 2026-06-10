@@ -6,7 +6,7 @@ status: canonico
 
 # Known Issues
 
-Nenhum bug funcional registrado na fundacao.
+Nenhum bug funcional registrado na fundacao, dominio, APIs backend ou engine.
 
 ## Limitacoes Atuais
 
@@ -17,3 +17,4 @@ Nenhum bug funcional registrado na fundacao.
 - `tinker --execute` com comandos multi-statement e variaveis teve conflito de quoting no PowerShell; smoke equivalente foi executado via bootstrap PHP dentro do container.
 - Se `backend/.env` local existir com `DB_CONNECTION=sqlite`, o servidor HTTP Docker pode autenticar contra banco errado. Alinhar `.env` local ao `.env.example` antes de smoke HTTP.
 - O versionamento imutavel da Fase 3B usa endpoint explicito `/draft`; update direto em publicado e recusado com 422.
+- A tabela `instance_steps` possui apenas `assigned_to`; para steps por role/multiplos aprovadores, a Fase 3C deixa `assigned_to=null` e resolve os aprovadores dinamicamente a partir de `step_approvers` no momento da decisao.

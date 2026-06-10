@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica inicial e a modelagem de dominio/dados implementadas e validadas localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes e engine backend de workflow implementadas e validadas localmente.
 
 Existe no repositorio:
 
@@ -48,6 +48,14 @@ Existe no repositorio:
   - `GraphValidator` no publish
   - definicoes publicadas imutaveis
   - `POST /api/v1/workflows/{id}/draft` para nova versao draft
+- Backend Workflow Engine da Fase 3C:
+  - `WorkflowEngine` com `start`, `decide`, `advance`, `reassign` e `comment`
+  - `ConditionEvaluator` com sandbox baseado apenas em dados da instancia
+  - `AssigneeResolver` para user, role e dinamico `requester_manager`
+  - endpoints `/api/v1/inbox`, `/api/v1/requests` e actions de steps
+  - suporte a approval modes `any`, `all` e `quorum`
+  - rejeicao roteada por transition `rejected` quando existir, ou terminal `rejected` quando nao existir
+  - transacao e `lockForUpdate` em decisoes para proteger quorum contra concorrencia
 
 Ainda nao existe:
 
@@ -72,11 +80,14 @@ Ainda nao existe:
 - A Fase 3A usa Sanctum Bearer token para API; armazenamento do token no frontend sera decidido na Fase 4A.
 - A Fase 3B definiu que drafts podem ser incompletos, mas publicacao valida grafo e condicoes por parse.
 - A Fase 3B definiu que editar publicado diretamente retorna 422; nova versao exige endpoint explicito de draft.
+- A Fase 3C definiu que a engine executa apenas definicoes publicadas e fixa `definition_version` na abertura.
+- A Fase 3C definiu que expressoes condicionais avaliam somente variaveis de `workflow_instances.data`.
+- A Fase 3C definiu que decisoes concorrentes sao serializadas por transacao e lock pessimista no step.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: fechamento e auditoria da Fase 3B na branch `feature/workflow-definition-api`.
+- Fase atual: fechamento e auditoria da Fase 3C na branch `feature/workflow-engine`.
 
 ## Bloqueios
 
@@ -85,5 +96,3 @@ Nenhum bloqueio tecnico registrado.
 ## Lacunas Conhecidas
 
 > [!todo] A CONFIRMAR: owner oficial a ser usado no front-matter dos documentos canonicos. Valor inicial usado: `LuanTrindade95`.
-
-> [!todo] A CONFIRMAR: politica de rejeicao da engine na Fase 3C: encerrar instancia imediatamente ou rotear para revisao quando houver transition de rejected.

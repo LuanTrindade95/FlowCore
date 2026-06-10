@@ -180,3 +180,67 @@ Atualizacao direta de definicao publicada retorna 422. Para evoluir um fluxo, us
 - A versao publicada permanece auditavel e intacta.
 - O builder edita somente drafts.
 - O contrato da API evita efeitos colaterais escondidos em uma tentativa de update.
+
+## ADR-10 - Engine orientada por definicao publicada
+
+### Contexto
+
+A Fase 3C precisava executar workflows configuraveis sem hardcoded flow por tipo de solicitacao. A engine tambem precisava respeitar o versionamento imutavel definido na Fase 3B.
+
+### Decisao
+
+Centralizar a execucao em `WorkflowEngine`, com operacoes de dominio para `start`, `decide`, `advance`, `reassign` e `comment`. A engine inicia apenas definicoes publicadas, valida campos obrigatorios do formulario, cria instancia com `definition_version` fixado e avanca por transitions configuradas no grafo.
+
+### Consequencias
+
+- O runtime passa a ser dirigido pelos dados publicados no builder.
+- Instancias mantem rastreabilidade da versao original da definicao.
+- Regras de ciclo de vida ficam concentradas no dominio em vez de espalhadas por controllers.
+
+## ADR-11 - Condicoes avaliadas em sandbox de dados da instancia
+
+### Contexto
+
+Transitions condicionais precisam avaliar expressoes de negocio como `amount > 1000`, mas permitir funcoes, objetos ou acesso externo criaria risco de injecao e comportamento nao auditavel.
+
+### Decisao
+
+Usar `symfony/expression-language` no `ConditionEvaluator`, expondo somente as chaves de `workflow_instances.data` como variaveis. Falhas de parse/avaliacao viram excecao de dominio da engine.
+
+### Consequencias
+
+- Condicoes permanecem declarativas e testaveis.
+- Expressoes maliciosas sem variaveis permitidas falham fechadas.
+- Funcoes customizadas de expressao ficam fora do MVP ate haver caso de uso claro.
+
+## ADR-12 - Guard rail de profundidade na avancagem
+
+### Contexto
+
+Mesmo com validacao de grafo no publish, a engine nao deve depender apenas de uma garantia anterior para evitar loops ou avancos recursivos excessivos.
+
+### Decisao
+
+Adicionar limite defensivo de profundidade no `WorkflowEngine::advance`, falhando quando o grafo excede o limite operacional da engine.
+
+### Consequencias
+
+- A engine tem protecao propria contra loops e configuracoes anormais.
+- Falhas ficam explicitas em vez de gerar recursao indefinida.
+- O limite pode ser ajustado futuramente se workflows reais exigirem maior profundidade.
+
+## ADR-13 - Decisoes protegidas por transacao e lock
+
+### Contexto
+
+Steps com `approval_mode=quorum` podem receber decisoes simultaneas. Sem lock, dois aprovadores poderiam fechar o mesmo step e duplicar contadores/auditoria.
+
+### Decisao
+
+Executar decisoes dentro de transacao e recarregar o `InstanceStep` com `lockForUpdate`. Depois do lock, a engine revalida status aberto, autorizacao, duplicidade e threshold antes de gravar a decisao.
+
+### Consequencias
+
+- Submissoes concorrentes fecham o step apenas uma vez.
+- O segundo request contra step ja fechado recebe erro de dominio em vez de alterar contadores.
+- A auditoria preserva uma decisao persistida para quorum 1, confirmada por smoke HTTP concorrente.

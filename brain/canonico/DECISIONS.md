@@ -109,3 +109,27 @@ Por que: a engine deve receber apenas definicoes publicadas estruturalmente exec
 Decisao: update direto em definicao publicada retorna 422; evoluir uma publicada exige `POST /api/v1/workflows/{id}/draft`, que clona grafo e form schema para nova versao draft.
 
 Por que: evita efeito colateral escondido em operacoes de update e preserva auditoria/versionamento imutavel.
+
+## 2026-06-10 - Engine backend dirigida pelo grafo publicado
+
+Decisao: implementar `WorkflowEngine` como servico de dominio para iniciar instancias, registrar decisoes, avancar steps, reatribuir e comentar.
+
+Por que: controllers devem orquestrar HTTP, enquanto invariantes de execucao, auditoria e transicoes pertencem ao dominio da engine.
+
+## 2026-06-10 - Sandbox de condicoes da engine
+
+Decisao: avaliar `condition_expression` com `symfony/expression-language`, expondo apenas variaveis vindas de `workflow_instances.data`.
+
+Por que: condicoes precisam ser configuraveis sem abrir acesso a funcoes, objetos ou ambiente externo.
+
+## 2026-06-10 - Rejeicao roteavel ou terminal
+
+Decisao: quando uma decisao e `reject`, a engine tenta transition `rejected`; se nenhuma transition for aplicavel, encerra a instancia como `rejected`.
+
+Por que: isso permite fluxos com revisao/correcao quando configurados, mas preserva comportamento seguro e previsivel para workflows simples.
+
+## 2026-06-10 - Concorrencia de decisoes por lock pessimista
+
+Decisao: processar decisoes com transacao e `lockForUpdate` no `InstanceStep`, revalidando estado e duplicidade depois do lock.
+
+Por que: steps com quorum nao podem aceitar duas decisoes simultaneas que dobrem contadores ou fechem o mesmo step duas vezes.
