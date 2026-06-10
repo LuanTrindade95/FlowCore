@@ -20,10 +20,11 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('FlowCore');
   });
 
-  it('should render title', () => {
+  it('should render the application outlets', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('FlowCore');
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    expect(compiled.querySelector('app-toast-outlet')).toBeTruthy();
   });
 });
