@@ -21,10 +21,30 @@ export const routes: Routes = [
       },
       {
         path: 'workflows',
+        pathMatch: 'full',
+        redirectTo: 'admin/workflows',
+      },
+      {
+        path: 'admin/workflows',
+        canActivate: [permissionGuard],
+        data: { permissions: ['workflows.manage'] },
+        loadComponent: () => import('./features/workflows/workflows-list.page').then((m) => m.WorkflowsListPageComponent),
+      },
+      {
+        path: 'admin/workflows/:id/builder',
         canActivate: [permissionGuard],
         data: { permissions: ['workflows.manage'] },
         loadComponent: () =>
-          import('./features/workflows/workflows-foundation.page').then((m) => m.WorkflowsFoundationPageComponent),
+          import('./features/workflows/builder/workflow-builder.page').then((m) => m.WorkflowBuilderPageComponent),
+      },
+      {
+        path: 'admin/workflows/:id/form',
+        canActivate: [permissionGuard],
+        data: { permissions: ['workflows.manage'] },
+        loadComponent: () =>
+          import('./features/workflows/form-builder/workflow-form-builder.page').then(
+            (m) => m.WorkflowFormBuilderPageComponent,
+          ),
       },
       {
         path: 'requests',

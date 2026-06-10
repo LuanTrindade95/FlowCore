@@ -59,7 +59,7 @@ interface ShellNavItem {
                 @case ('/dashboard') {
                   <svg lucideLayoutDashboard class="h-4 w-4"></svg>
                 }
-                @case ('/workflows') {
+                @case ('/admin/workflows') {
                   <svg lucideWorkflow class="h-4 w-4"></svg>
                 }
                 @case ('/requests') {
@@ -117,7 +117,7 @@ interface ShellNavItem {
               @case ('/dashboard') {
                 <svg lucideLayoutDashboard class="h-4 w-4"></svg>
               }
-              @case ('/workflows') {
+              @case ('/admin/workflows') {
                 <svg lucideWorkflow class="h-4 w-4"></svg>
               }
               @case ('/requests') {
@@ -140,7 +140,7 @@ export class AppShellComponent {
 
   protected readonly navItems: ShellNavItem[] = [
     { label: 'Dashboard', route: '/dashboard' },
-    { label: 'Workflows', route: '/workflows', permissions: ['workflows.manage'] },
+    { label: 'Workflows', route: '/admin/workflows', permissions: ['workflows.manage'] },
     { label: 'Requisições', route: '/requests' },
     { label: 'Inbox', route: '/inbox', permissions: ['requests.decide', 'requests.view-all'] },
   ];

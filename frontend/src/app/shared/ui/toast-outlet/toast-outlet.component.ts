@@ -13,7 +13,7 @@ const toastClasses: Record<ToastKind, string> = {
   selector: 'app-toast-outlet',
   standalone: true,
   template: `
-    <div class="fixed right-4 top-4 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
+    <div class="fixed left-4 top-20 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3 lg:bottom-4 lg:top-auto">
       @for (toast of toastService.toasts(); track toast.id) {
         <section class="rounded-lg border px-4 py-3 text-sm shadow-sm" [class]="toastClasses[toast.kind]">
           <div class="flex items-start justify-between gap-3">
