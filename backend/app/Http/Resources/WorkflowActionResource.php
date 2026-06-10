@@ -20,6 +20,11 @@ class WorkflowActionResource extends JsonResource
             'action' => $this->action->value,
             'payload' => $this->payload ?? [],
             'created_at' => $this->created_at?->toISOString(),
+            'actor' => UserSummaryResource::make($this->whenLoaded('actor')),
+            'step' => $this->when(
+                $this->relationLoaded('instanceStep') && $this->instanceStep !== null,
+                fn () => WorkflowStepResource::make($this->instanceStep->step)
+            ),
         ];
     }
 }

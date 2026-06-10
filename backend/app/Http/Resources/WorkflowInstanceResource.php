@@ -22,6 +22,9 @@ class WorkflowInstanceResource extends JsonResource
             'data' => $this->data ?? [],
             'started_at' => $this->started_at?->toISOString(),
             'finished_at' => $this->finished_at?->toISOString(),
+            'definition' => WorkflowDefinitionResource::make($this->whenLoaded('definition')),
+            'requester' => UserSummaryResource::make($this->whenLoaded('requester')),
+            'current_step' => WorkflowStepResource::make($this->whenLoaded('currentStep')),
             'steps' => InstanceStepResource::collection($this->whenLoaded('steps')),
             'actions' => WorkflowActionResource::collection($this->whenLoaded('actions')),
         ];

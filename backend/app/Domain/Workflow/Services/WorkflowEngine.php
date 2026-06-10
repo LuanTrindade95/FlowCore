@@ -2,6 +2,7 @@
 
 namespace App\Domain\Workflow\Services;
 
+use App\Domain\Workflow\Enums\FormFieldType;
 use App\Domain\Workflow\Enums\InstanceStepDecisionValue;
 use App\Domain\Workflow\Enums\InstanceStepStatus;
 use App\Domain\Workflow\Enums\TransitionEvent;
@@ -17,6 +18,8 @@ use App\Models\WorkflowDefinition;
 use App\Models\WorkflowInstance;
 use App\Models\WorkflowStep;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class WorkflowEngine
@@ -241,16 +244,31 @@ class WorkflowEngine
      */
     private function validateFormData(WorkflowDefinition $definition, array $data): void
     {
-        $errors = [];
+        $fields = $definition->formFields;
+        $unknownFields = array_values(array_diff(array_keys($data), $fields->pluck('key')->all()));
 
-        foreach ($definition->formFields as $field) {
-            if ($field->required && ! array_key_exists($field->key, $data)) {
-                $errors[$field->key][] = 'Campo obrigatorio.';
-            }
+        if ($unknownFields !== []) {
+            throw ValidationException::withMessages([
+                'data' => ['O formulario contem campos que nao pertencem a definicao publicada.'],
+            ]);
         }
 
-        if ($errors !== []) {
-            throw ValidationException::withMessages($errors);
+        $rules = [];
+
+        foreach ($fields as $field) {
+            $fieldRules = [$field->required ? 'required' : 'nullable'];
+
+            $fieldRules[] = match ($field->type) {
+                FormFieldType::Text, FormFieldType::Textarea => 'string',
+                FormFieldType::Number => 'numeric',
+                FormFieldType::Select => Rule::in($field->options ?? []),
+                FormFieldType::Date => 'date_format:Y-m-d',
+                FormFieldType::Boolean => 'boolean',
+            };
+
+            $rules[$field->key] = $fieldRules;
         }
+
+        Validator::make($data, $rules)->validate();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Domain\Workflow\Enums\WorkflowInstanceStatus;
 use App\Domain\Workflow\Exceptions\InvalidWorkflowStateTransition;
 use Database\Factories\WorkflowInstanceFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -68,6 +69,25 @@ class WorkflowInstance extends Model
     public function actions(): HasMany
     {
         return $this->hasMany(WorkflowAction::class);
+    }
+
+    public function scopeVisibleTo(Builder $query, User $user): Builder
+    {
+        if ($user->can('requests.view-all')) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $visibility) use ($user) {
+            if ($user->can('requests.create')) {
+                $visibility->orWhere('requester_id', $user->id);
+            }
+
+            if ($user->can('requests.decide')) {
+                $visibility->orWhereHas('steps', function (Builder $steps) use ($user) {
+                    $steps->where('assigned_to', $user->id)->orWhereNull('assigned_to');
+                });
+            }
+        });
     }
 
     public function transitionTo(WorkflowInstanceStatus|string $status): void

@@ -34,7 +34,15 @@ class WorkflowDecisionController extends Controller
             $request->input('comment')
         );
 
-        return new WorkflowInstanceResource($instance->load(['steps', 'actions']));
+        return new WorkflowInstanceResource($instance->load([
+            'definition',
+            'requester',
+            'currentStep',
+            'steps.step',
+            'steps.assignee',
+            'actions.actor',
+            'actions.instanceStep.step',
+        ]));
     }
 
     public function reassign(

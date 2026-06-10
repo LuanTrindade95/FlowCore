@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\FormFieldController;
+use App\Http\Controllers\Api\V1\RuntimeAssigneeController;
+use App\Http\Controllers\Api\V1\RuntimeDashboardController;
+use App\Http\Controllers\Api\V1\RuntimeWorkflowController;
 use App\Http\Controllers\Api\V1\StepApproverController;
 use App\Http\Controllers\Api\V1\WorkflowDecisionController;
 use App\Http\Controllers\Api\V1\WorkflowDefinitionController;
@@ -22,6 +25,10 @@ Route::prefix('v1')->group(function () {
         ]))->middleware('permission:workflows.manage');
 
         Route::get('inbox', [WorkflowRequestController::class, 'inbox']);
+        Route::get('runtime/workflows', [RuntimeWorkflowController::class, 'index']);
+        Route::get('runtime/workflows/{workflow}', [RuntimeWorkflowController::class, 'show']);
+        Route::get('runtime/assignees', [RuntimeAssigneeController::class, 'index']);
+        Route::get('dashboard', RuntimeDashboardController::class);
         Route::get('requests', [WorkflowRequestController::class, 'index']);
         Route::post('requests', [WorkflowRequestController::class, 'store']);
         Route::get('requests/{request}', [WorkflowRequestController::class, 'show']);

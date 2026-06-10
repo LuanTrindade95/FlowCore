@@ -14,7 +14,10 @@ class WorkflowInstancePolicy
 
     public function view(User $user, WorkflowInstance $workflowInstance): bool
     {
-        return $user->can('requests.view-all') || $workflowInstance->requester_id === $user->id;
+        return WorkflowInstance::query()
+            ->visibleTo($user)
+            ->whereKey($workflowInstance->id)
+            ->exists();
     }
 
     public function create(User $user): bool
