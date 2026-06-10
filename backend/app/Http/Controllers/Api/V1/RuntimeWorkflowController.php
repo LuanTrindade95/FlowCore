@@ -14,7 +14,10 @@ class RuntimeWorkflowController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        Gate::authorize('create', WorkflowInstance::class);
+        abort_unless(
+            Gate::allows('create', WorkflowInstance::class) || Gate::allows('viewAny', WorkflowInstance::class),
+            403
+        );
 
         $workflows = WorkflowDefinition::query()
             ->where('status', WorkflowDefinitionStatus::Published)

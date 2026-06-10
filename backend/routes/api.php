@@ -11,7 +11,10 @@ use App\Http\Controllers\Api\V1\WorkflowDefinitionController;
 use App\Http\Controllers\Api\V1\WorkflowRequestController;
 use App\Http\Controllers\Api\V1\WorkflowStepController;
 use App\Http\Controllers\Api\V1\WorkflowTransitionController;
+use App\Models\WorkflowInstance;
 use Illuminate\Support\Facades\Route;
+
+Route::model('workflowRequest', WorkflowInstance::class);
 
 Route::prefix('v1')->group(function () {
     Route::post('auth/login', [AuthController::class, 'login'])->middleware('guest');
@@ -31,7 +34,7 @@ Route::prefix('v1')->group(function () {
         Route::get('dashboard', RuntimeDashboardController::class);
         Route::get('requests', [WorkflowRequestController::class, 'index']);
         Route::post('requests', [WorkflowRequestController::class, 'store']);
-        Route::get('requests/{request}', [WorkflowRequestController::class, 'show']);
+        Route::get('requests/{workflowInstanceId}', [WorkflowRequestController::class, 'show']);
         Route::post('requests/{workflowRequest}/steps/{step}/decide', [WorkflowDecisionController::class, 'decide']);
         Route::post('requests/{workflowRequest}/steps/{step}/reassign', [WorkflowDecisionController::class, 'reassign']);
         Route::post('requests/{workflowRequest}/steps/{step}/comment', [WorkflowDecisionController::class, 'comment']);

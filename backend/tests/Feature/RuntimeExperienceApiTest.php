@@ -192,6 +192,33 @@ it('returns actionable inbox context and scoped dashboard metrics', function () 
         ->assertJsonPath('active', 1);
 });
 
+it('does not advertise decision actions for closed steps', function () {
+    $approver = runtimeUser('approver');
+    $requester = runtimeUser('requester');
+    $definition = runtimeDefinition('closed-actions-flow');
+    $step = runtimeStep($definition);
+    $instance = WorkflowInstance::factory()->create([
+        'workflow_definition_id' => $definition->id,
+        'requester_id' => $requester->id,
+        'status' => WorkflowInstanceStatus::Approved,
+        'current_step_id' => null,
+    ]);
+    InstanceStep::factory()->create([
+        'workflow_instance_id' => $instance->id,
+        'workflow_step_id' => $step->id,
+        'assigned_to' => $approver->id,
+        'status' => InstanceStepStatus::Approved,
+    ]);
+
+    $response = $this->actingAs($approver)->getJson("/api/v1/requests/{$instance->id}")
+        ->assertOk();
+
+    $response
+        ->assertJsonPath('steps.0.actions.decide', false)
+        ->assertJsonPath('steps.0.actions.reassign', false)
+        ->assertJsonPath('steps.0.actions.comment', false);
+});
+
 it('validates runtime data against published form field types and options', function () {
     $requester = runtimeUser('requester');
     $definition = runtimeDefinition('validation-flow');

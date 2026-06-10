@@ -43,11 +43,12 @@ class WorkflowRequestController extends Controller
         return new WorkflowInstanceResource($instance->load($this->runtimeRelations()));
     }
 
-    public function show(WorkflowInstance $request): WorkflowInstanceResource
+    public function show(int $workflowInstanceId): WorkflowInstanceResource
     {
-        Gate::authorize('view', $request);
+        $instance = WorkflowInstance::findOrFail($workflowInstanceId);
+        Gate::authorize('view', $instance);
 
-        return new WorkflowInstanceResource($request->load($this->runtimeRelations()));
+        return new WorkflowInstanceResource($instance->load($this->runtimeRelations()));
     }
 
     public function inbox(): AnonymousResourceCollection
