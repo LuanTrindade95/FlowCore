@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Workflow\Exceptions\WorkflowEngineException;
 use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -64,6 +65,14 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => 'Voce nao tem permissao para executar esta acao.',
                     'code' => 'FORBIDDEN',
                 ], 403);
+            }
+
+            if ($exception instanceof WorkflowEngineException) {
+                return response()->json([
+                    'message' => 'Nao foi possivel executar a transicao do workflow.',
+                    'code' => 'WORKFLOW_ENGINE_ERROR',
+                    'errors' => ['workflow' => [$exception->getMessage()]],
+                ], 422);
             }
 
             if ($exception instanceof HttpExceptionInterface) {
