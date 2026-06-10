@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\FormFieldController;
+use App\Http\Controllers\Api\V1\StepApproverController;
+use App\Http\Controllers\Api\V1\WorkflowDefinitionController;
+use App\Http\Controllers\Api\V1\WorkflowStepController;
+use App\Http\Controllers\Api\V1\WorkflowTransitionController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -13,5 +18,27 @@ Route::prefix('v1')->group(function () {
         Route::get('authorization/workflows-manage-smoke', fn () => response()->json([
             'message' => 'Permissao validada.',
         ]))->middleware('permission:workflows.manage');
+
+        Route::middleware('permission:workflows.manage')->group(function () {
+            Route::apiResource('workflows', WorkflowDefinitionController::class);
+            Route::post('workflows/{workflow}/publish', [WorkflowDefinitionController::class, 'publish']);
+            Route::post('workflows/{workflow}/draft', [WorkflowDefinitionController::class, 'createDraftFromPublished']);
+
+            Route::post('workflows/{workflow}/steps', [WorkflowStepController::class, 'store']);
+            Route::put('workflows/{workflow}/steps/{step}', [WorkflowStepController::class, 'update']);
+            Route::delete('workflows/{workflow}/steps/{step}', [WorkflowStepController::class, 'destroy']);
+
+            Route::post('workflows/{workflow}/transitions', [WorkflowTransitionController::class, 'store']);
+            Route::put('workflows/{workflow}/transitions/{transition}', [WorkflowTransitionController::class, 'update']);
+            Route::delete('workflows/{workflow}/transitions/{transition}', [WorkflowTransitionController::class, 'destroy']);
+
+            Route::post('workflows/{workflow}/steps/{step}/approvers', [StepApproverController::class, 'store']);
+            Route::put('workflows/{workflow}/steps/{step}/approvers/{approver}', [StepApproverController::class, 'update']);
+            Route::delete('workflows/{workflow}/steps/{step}/approvers/{approver}', [StepApproverController::class, 'destroy']);
+
+            Route::post('workflows/{workflow}/form-fields', [FormFieldController::class, 'store']);
+            Route::put('workflows/{workflow}/form-fields/{field}', [FormFieldController::class, 'update']);
+            Route::delete('workflows/{workflow}/form-fields/{field}', [FormFieldController::class, 'destroy']);
+        });
     });
 });
