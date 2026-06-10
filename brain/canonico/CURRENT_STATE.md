@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow e fundacao frontend autenticada implementadas e validadas localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada e builder visual/form builder implementados e validados localmente.
 
 Existe no repositorio:
 
@@ -65,6 +65,13 @@ Existe no repositorio:
   - shell SaaS light-enterprise com sidebar desktop e bottom nav mobile
   - tela `/login` com reactive form, validacao, loading e erro
   - Playwright dev dependency para smoke visual local
+- Frontend Builder Visual + Form Builder da Fase 4B:
+  - rotas `/admin/workflows`, `/admin/workflows/:id/builder` e `/admin/workflows/:id/form`
+  - lista de workflows com status, versao, clone explicito de publicado para draft e redirecionamento legado de `/workflows`
+  - canvas visual com `@foblex/flow`, nodes, connections e painel lateral de configuracao
+  - persistencia de steps, approvers, transitions e form fields via APIs da Fase 3B
+  - publish usando o backend como autoridade, exibindo `errors.graph` 422 e destacando problemas por node/transition
+  - form builder com reorder persistido e preview de campos
 
 Ainda nao existe:
 
@@ -95,11 +102,13 @@ Ainda nao existe:
 - A Fase 4A definiu token frontend somente em memoria, sem `localStorage`.
 - A Fase 4A definiu Signals como estrategia de estado frontend, sem NgRx.
 - A Fase 4A adicionou Playwright para smoke visual local de login/shell.
+- A Fase 4B definiu que o canvas Foblex e superficie visual; o estado de dominio e serializacao continuam na feature Angular e na API Laravel.
+- A Fase 4B definiu que validacao de grafo para publicacao vem do backend, com UI apenas renderizando `errors.graph` e highlights.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: fechamento e auditoria da Fase 4A na branch `feature/frontend-foundation`.
+- Fase atual: Fase 4B auditada na branch `feature/frontend-builder`; proxima fase planejada e Fase 4C - Frontend Runtime.
 
 ## Bloqueios
 

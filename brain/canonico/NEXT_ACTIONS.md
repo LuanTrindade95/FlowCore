@@ -8,26 +8,26 @@ status: canonico
 
 ## Ordem Recomendada
 
-1. Concluir auditoria da Fase 4A contra `docs/VISION.md`, `docs/PROGRESS.md`, rotas Angular, AuthService, guards, interceptors, UI kit, login real e smoke Playwright.
-2. Se a Fase 4A for aprovada, executar Fase 4B - Frontend Builder Visual + Form Builder:
-   - lista de workflows e versoes
-   - canvas `/admin/workflows/:id/builder` com `@foblex/flow`
-   - painel lateral de step/transition/approvers
-   - form builder para `form_fields`
-   - publish com exibicao de erros 422 do `GraphValidator`
+1. Executar Fase 4C - Frontend Runtime:
+   - lista e detalhe de solicitacoes
+   - abertura de request baseada em definicao publicada e form schema
+   - inbox com steps pendentes e decisoes
+   - historico/auditoria de actions
+   - estados de loading/empty/error e permissao por papel
+2. Manter o builder da Fase 4B sem introduzir runtime dentro das telas administrativas.
 3. Manter uma branch por fase e commits granulares.
 4. Atualizar `docs/DECISIONS.md`, `docs/PROGRESS.md` e o Brain no fechamento de cada fase.
-5. Nao implementar runtime frontend antes da Fase 4C.
+5. Auditar o seeder demo antes de depender de `php artisan db:seed` repetido em smoke local.
 
 ## Primeira Sessao Recomendada
 
-Fase 4A ja foi implementada na branch `feature/frontend-foundation`.
+Fase 4B ja foi implementada na branch `feature/frontend-builder`.
 
-Evidencias esperadas antes de avancar:
+Evidencias registradas:
 
 - `npm run typecheck`, `npm run lint`, Jest e build verdes
-- Jest cobrindo AuthService, errorInterceptor 401, permissionGuard e locale pt-BR
+- Jest cobrindo serializacao do grafo, highlights de publish 422 e reorder/payload do form builder
 - Docker frontend servindo o bundle atual em `http://localhost:4200`
-- smoke Playwright de login admin e shell autenticado em desktop/mobile
+- smoke Playwright de login admin, lista, builder com erro 422 e form field salvo
 - ADRs e progresso atualizados
-- veredicto `APROVADO` do verificador
+- veredicto `APROVADO` do verificador local

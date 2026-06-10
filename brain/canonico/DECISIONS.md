@@ -151,3 +151,15 @@ Por que: a Fase 4A precisa de estado simples e previsivel; store global seria cu
 Decisao: adicionar `@playwright/test` como dev dependency para validar login e shell autenticado em Chromium desktop/mobile.
 
 Por que: a fundacao frontend precisa de evidencia visual reproduzivel, nao apenas typecheck/build.
+
+## 2026-06-10 - Canvas Foblex controlado pela feature
+
+Decisao: usar `@foblex/flow` para a superficie visual do builder, mantendo serializacao, selecao e persistencia na feature Angular e nos endpoints Laravel.
+
+Por que: o canvas nao deve virar fonte de verdade do workflow; ele renderiza e facilita interacao, enquanto o contrato de dominio segue nos sub-recursos da API.
+
+## 2026-06-10 - Publish 422 como feedback visual do builder
+
+Decisao: renderizar `errors.graph` retornado pelo backend no publish e destacar nodes/transitions por `meta.step_id` e `meta.transition_id`.
+
+Por que: duplicar o `GraphValidator` no Angular criaria divergencia; o frontend deve orientar o usuario sem substituir a autoridade do backend.

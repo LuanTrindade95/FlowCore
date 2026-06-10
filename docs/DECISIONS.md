@@ -292,3 +292,35 @@ Adicionar `@playwright/test` como dev dependency e usar Chromium headless para s
 - A auditoria visual deixa de depender apenas de inspecao manual.
 - A Fase 6 pode evoluir para E2E formais sem trocar ferramenta.
 - A auditoria completa de dependencias dev continua separada de `npm audit --omit=dev`, pois o toolchain frontend pode carregar avisos dev-only.
+
+## ADR-17 - Canvas Foblex com estado de dominio controlado pela aplicacao
+
+### Contexto
+
+A Fase 4B precisava entregar um builder visual sem transformar a biblioteca de canvas na fonte de verdade do workflow. O contrato de persistencia ja existia no backend por sub-recursos de steps, approvers, transitions e form fields.
+
+### Decisao
+
+Usar `@foblex/flow` para renderizar e interagir com o canvas (`f-flow`, `f-canvas`, nodes e connections), mantendo serializacao, selecao, formularios laterais e chamadas de API em servicos/componentes Angular do dominio de workflows.
+
+### Consequencias
+
+- O canvas fica substituivel sem alterar o contrato da API.
+- O frontend nao cria um modelo paralelo de workflow incompatível com Laravel.
+- A biblioteca resolve a superficie visual, enquanto regras de persistencia continuam explicitas na feature.
+
+## ADR-18 - Erros de publish 422 como fonte de verdade visual
+
+### Contexto
+
+O builder precisa orientar o administrador antes da publicacao, mas duplicar toda a regra do `GraphValidator` no Angular criaria divergencia entre frontend e backend.
+
+### Decisao
+
+No publish, o frontend chama `POST /api/v1/workflows/{id}/publish` e usa `errors.graph` da resposta 422 para renderizar mensagens e destacar nodes/transitions por `meta.step_id` e `meta.transition_id`. Validacoes client-side ficam restritas ao formulario local.
+
+### Consequencias
+
+- O backend permanece a autoridade para validade do grafo.
+- A UI mostra feedback contextual sem aceitar grafo que a engine recusaria.
+- Novas regras de publish podem ser adicionadas no backend com baixo acoplamento no frontend, desde que preservem o shape de erro.

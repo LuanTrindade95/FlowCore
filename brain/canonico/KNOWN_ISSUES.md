@@ -6,7 +6,7 @@ status: canonico
 
 # Known Issues
 
-Nenhum bug funcional registrado na fundacao, dominio, APIs backend, engine ou fundacao frontend.
+Nenhum bug funcional registrado na fundacao, dominio, APIs backend, engine, fundacao frontend ou builder da Fase 4B.
 
 ## Limitacoes Atuais
 
@@ -16,6 +16,7 @@ Nenhum bug funcional registrado na fundacao, dominio, APIs backend, engine ou fu
 - `npm audit --omit=dev` esta limpo; auditoria completa do npm ainda pode apontar vulnerabilidades em dependencias dev do toolchain Angular/Jest.
 - `tinker --execute` com comandos multi-statement e variaveis teve conflito de quoting no PowerShell; smoke equivalente foi executado via bootstrap PHP dentro do container.
 - Se `backend/.env` local existir com `DB_CONNECTION=sqlite`, o servidor HTTP Docker pode autenticar contra banco errado. Alinhar `.env` local ao `.env.example` antes de smoke HTTP.
+- `php artisan db:seed` nao e idempotente quando os workflows demo ja existem; o `DemoWorkflowSeeder` tenta inserir slug/version duplicados. Usar `migrate:fresh --seed` para reset completo ou tornar o seeder idempotente em fase de hardening.
 - O versionamento imutavel da Fase 3B usa endpoint explicito `/draft`; update direto em publicado e recusado com 422.
 - A tabela `instance_steps` possui apenas `assigned_to`; para steps por role/multiplos aprovadores, a Fase 3C deixa `assigned_to=null` e resolve os aprovadores dinamicamente a partir de `step_approvers` no momento da decisao.
 - `ng build` com Tailwind CSS v4 ainda pode emitir um aviso de otimizacao CSS sobre uma regra base aninhada do preflight (`& -> Empty sub-selector`). O build termina com exit code 0 e o smoke Playwright confirmou CSS aplicado no Chromium.
