@@ -11,5 +11,5 @@
 | Fase 4A - Frontend Fundacao | DONE | Branch `feature/frontend-foundation`; commits `3284038`, `e09ce7f`, `d7cda5a`; auth com signals, interceptors, guards, UI kit, shell responsivo, login real e smoke Playwright desktop/mobile validados. |
 | Fase 4B - Frontend Builder Visual + Form Builder | DONE | Branch `feature/frontend-builder`; lista/versionamento, canvas Foblex, painel de steps/transitions/approvers, form builder, publish com erros 422 destacados, Jest, build e smoke Playwright validados. |
 | Fase 4C - Frontend Runtime | DONE | Branch `feature/runtime-experience`; commits `fda4335`, `d0cc8e6`, `52d93f1`, `23ee6a6`, `070e026`, `0d5f750`, `12ed4aa`; APIs runtime seguras, formulario dinamico, lista/detalhe, inbox, dashboard, 34 testes backend, 23 testes frontend, build e E2E solicitante/aprovador validados. |
-| Fase 5 - Escalonamento, Automacoes + Realtime | PENDING | - |
+| Fase 5 - Escalonamento, Automacoes + Realtime | DONE | Branch `feature/realtime-automation`; commits `373a411`, `9c40f20`, `d7a180e`; SLA scheduler, evento realtime, auth privada Reverb, refresh automatico do inbox/detalhe/dashboard, 38 testes backend, 25 testes frontend, build, auditorias e E2E visual request `#77` validado. |
 | Fase 6 - Polish & Vitrine | PENDING | - |

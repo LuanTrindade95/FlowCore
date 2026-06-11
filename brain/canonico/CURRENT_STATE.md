@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-10
+updated: 2026-06-11
 owner: LuanTrindade95
 status: canonico
 ---
@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder e experiencia runtime implementados e validados localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime e automacoes realtime de SLA implementadas e validadas localmente.
 
 Existe no repositorio:
 
@@ -86,6 +86,14 @@ Existe no repositorio:
   - inbox com progresso any/all/quorum e acoes condicionadas pelas flags da API
   - dashboard com pendencias, atrasos, instancias ativas, throughput e volume por workflow
   - E2E local validou solicitacao `#72`, aprovacao do gestor e avanco para aprovacao financeira
+- Fase 5 - Escalonamento, Automacoes + Realtime:
+  - `workflow:escalate-overdue` agendado a cada minuto em `routes/console.php`
+  - `WorkflowEscalationService` com lock pessimista, revalidacao e idempotencia de escalonamento
+  - `RuntimeWorkflowUpdated` em canais privados `users.{id}.runtime`
+  - `/api/broadcasting/auth` com Sanctum e JSON `auth` para clientes Reverb/Echo
+  - `RuntimeEventDispatcher` calculando solicitante, admins, assignee aberto e aprovadores resolvidos
+  - frontend com `RuntimeRealtimeService` e refresh automatico de inbox, detalhe e dashboard
+  - E2E local validou request `#77` mudando de `Pendente` para `Escalada` sem reload manual
 
 Ainda nao existe:
 
@@ -121,11 +129,15 @@ Ainda nao existe:
 - A Fase 4C definiu que o schema publicado dirige o formulario runtime, mas a engine sempre revalida o payload.
 - A Fase 4C definiu que visibilidade e flags de acao sao autoridade do backend, nao da navegacao Angular.
 - A Fase 4C definiu query parameters como fonte de verdade dos filtros da lista de solicitacoes.
+- A Fase 5 definiu canais privados por usuario como fronteira de realtime runtime.
+- A Fase 5 definiu `/api/broadcasting/auth` como endpoint JSON de autorizacao Reverb para a SPA.
+- A Fase 5 definiu `ShouldBroadcastNow` para eventos pequenos de refresh operacional.
+- A Fase 5 definiu escalonamento de SLA idempotente por comando agendado com lock pessimista.
 
 ## Em Progresso
 
 - Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: Fase 4C auditada na branch `feature/runtime-experience`; proxima fase planejada e Fase 5 - Escalonamento, Automacoes + Realtime.
+- Fase atual: Fase 5 auditada na branch `feature/realtime-automation`; proxima fase planejada e Fase 6 - Polish & Vitrine.
 
 ## Bloqueios
 

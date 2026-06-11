@@ -1,12 +1,12 @@
 ---
-updated: 2026-06-10
+updated: 2026-06-11
 owner: LuanTrindade95
 status: canonico
 ---
 
 # Known Issues
 
-Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 4C.
+Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 5.
 
 ## Limitacoes Atuais
 
@@ -21,4 +21,6 @@ Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 4C.
 - O versionamento imutavel da Fase 3B usa endpoint explicito `/draft`; update direto em publicado e recusado com 422.
 - A tabela `instance_steps` possui apenas `assigned_to`; para steps por role/multiplos aprovadores, a Fase 3C deixa `assigned_to=null` e resolve os aprovadores dinamicamente a partir de `step_approvers` no momento da decisao.
 - `ng build` com Tailwind CSS v4 ainda pode emitir um aviso de otimizacao CSS sobre uma regra base aninhada do preflight (`& -> Empty sub-selector`). O build termina com exit code 0 e o smoke Playwright confirmou CSS aplicado no Chromium.
-- O ambiente de E2E local depende de usuarios demo, RBAC e workflows publicados. Antes da Fase 5, consolidar um comando idempotente de seed para staging local.
+- O ambiente de E2E local depende de usuarios demo, RBAC e workflows publicados. Antes da Fase 6, consolidar um comando idempotente de seed para staging local.
+- O endpoint realtime usa explicitamente a conexao `reverb`; ambientes que alterarem o nome da conexao de broadcasting devem atualizar `BroadcastAuthController`.
+- Em Docker local, `backend/.env` ignorado precisa estar alinhado ao `.env.example` para `BROADCAST_CONNECTION`, `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET` e `REVERB_BROADCAST_HOST`; caso contrario, o servidor `artisan serve` pode divergir dos processos CLI.

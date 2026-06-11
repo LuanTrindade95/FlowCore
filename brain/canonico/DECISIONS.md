@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-10
+updated: 2026-06-11
 owner: LuanTrindade95
 status: canonico
 ---
@@ -181,3 +181,27 @@ Por que: esconder links no frontend nao protege dados nem decisoes; lista, detal
 Decisao: persistir filtros da lista de solicitacoes em query parameters.
 
 Por que: URLs reproduziveis melhoram navegacao, compartilhamento, testes e eliminam a necessidade de store global para estado efemero.
+
+## 2026-06-11 - Realtime runtime por canais privados
+
+Decisao: usar canais privados `users.{id}.runtime` com auth Sanctum em `/api/broadcasting/auth` para eventos de runtime.
+
+Por que: eventos devem respeitar a mesma visibilidade server-side das APIs runtime e evitar broadcast global de dados operacionais.
+
+## 2026-06-11 - Auth JSON dedicado para Reverb/Echo
+
+Decisao: a SPA usa `/api/broadcasting/auth` em vez da rota padrao `/broadcasting/auth`.
+
+Por que: o endpoint API garante resposta JSON `auth` para o Pusher/Echo e falha fechado com 403 para canal de outro usuario, mantendo compatibilidade com Sanctum Bearer token.
+
+## 2026-06-11 - SLA escalation idempotente
+
+Decisao: escalonar steps vencidos por comando agendado `workflow:escalate-overdue`, com lock pessimista e revalidacao de estado antes de transicionar para `escalated`.
+
+Por que: o scheduler pode rodar repetidamente e em paralelo sem duplicar auditoria nem alterar steps ja fechados.
+
+## 2026-06-11 - Broadcast imediato para refresh operacional
+
+Decisao: `RuntimeWorkflowUpdated` usa `ShouldBroadcastNow`.
+
+Por que: eventos pequenos de refresh operacional precisam chegar imediatamente ao inbox/detalhe/dashboard e falhas de broadcast devem aparecer no fluxo que disparou a atualizacao.

@@ -356,3 +356,35 @@ Usar query parameters como fonte de verdade dos filtros da lista de solicitacoes
 - Filtros ficam reproduziveis, navegaveis e testaveis.
 - A lista nao depende de store global para estado efemero.
 - Novos filtros devem manter compatibilidade com o contrato da API e com URLs existentes.
+
+## ADR-21 - Realtime runtime por canais privados por usuario
+
+### Contexto
+
+A Fase 5 precisava atualizar inbox, detalhe e dashboard quando a engine altera uma instancia, sem polling excessivo e sem expor eventos de outros usuarios.
+
+### Decisao
+
+Broadcasts de runtime usam Reverb/Echo em canais privados `users.{id}.runtime`, autorizados por Sanctum em `/api/broadcasting/auth`. O backend calcula destinatarios a partir de solicitante, admins com `requests.view-all`, assignee aberto e aprovadores resolvidos. O frontend assina o canal do usuario autenticado e recarrega apenas as telas runtime afetadas.
+
+### Consequencias
+
+- A visibilidade continua server-side e alinhada aos contratos da Fase 4C.
+- O frontend evita polling e recebe eventos somente do usuario autenticado.
+- O endpoint de auth de broadcast retorna JSON com `auth` e falha fechado com 403 para canais de outros usuarios.
+
+## ADR-22 - Escalonamento de SLA idempotente com broadcast imediato
+
+### Contexto
+
+Steps vencidos precisam ser escalados automaticamente sem duplicar auditoria e sem depender de refresh manual da interface operacional.
+
+### Decisao
+
+Adicionar `workflow:escalate-overdue` agendado a cada minuto, com `lockForUpdate`, revalidacao de status aberto e registro unico de `workflow_actions.action=escalated`. Eventos `RuntimeWorkflowUpdated` usam `ShouldBroadcastNow` para entregar refresh operacional imediatamente apos a mutacao.
+
+### Consequencias
+
+- O comando pode rodar repetidamente sem reescalar o mesmo step.
+- Falhas de broadcast aparecem na operacao que disparou o evento em vez de ficarem silenciosas na fila.
+- O payload realtime permanece pequeno e carrega apenas ids, acao e timestamp; dados completos continuam vindo das APIs runtime.
