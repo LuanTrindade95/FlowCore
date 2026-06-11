@@ -27,6 +27,7 @@ class WorkflowEngine
     public function __construct(
         private readonly AssigneeResolver $assigneeResolver,
         private readonly ConditionEvaluator $conditionEvaluator,
+        private readonly RuntimeEventDispatcher $runtimeEvents,
     ) {}
 
     /**
@@ -63,6 +64,8 @@ class WorkflowEngine
             $this->recordAction($instance, $instanceStep, $requester, WorkflowActionType::Submitted, [
                 'data' => $data,
             ]);
+
+            $this->runtimeEvents->dispatch($instance, WorkflowActionType::Submitted, $instanceStep);
 
             return $instance->load(['steps', 'actions']);
         });
@@ -106,6 +109,10 @@ class WorkflowEngine
                 $decision === InstanceStepDecisionValue::Approve ? WorkflowActionType::Approved : WorkflowActionType::Rejected,
                 ['comment' => $comment]
             );
+
+            $this->runtimeEvents->dispatch($lockedStep->instance, $decision === InstanceStepDecisionValue::Approve
+                ? WorkflowActionType::Approved
+                : WorkflowActionType::Rejected, $lockedStep);
 
             if ($decision === InstanceStepDecisionValue::Reject) {
                 $lockedStep->transitionTo(InstanceStepStatus::Rejected);
@@ -165,6 +172,8 @@ class WorkflowEngine
                 'to_step_id' => $transition->to_step_id,
                 'event' => $event->value,
             ]);
+
+            $this->runtimeEvents->dispatch($instance, WorkflowActionType::AutoAdvanced, $instanceStep);
         }
 
         return $instance->refresh();
@@ -172,6 +181,8 @@ class WorkflowEngine
 
     public function reassign(InstanceStep $instanceStep, User $actor, User $newAssignee): InstanceStep
     {
+        $previousAssigneeId = $instanceStep->assigned_to;
+
         if (! $this->actorCanDecide($instanceStep->loadMissing(['instance', 'step.approvers']), $actor)) {
             throw WorkflowEngineException::actorCannotDecide();
         }
@@ -182,14 +193,23 @@ class WorkflowEngine
             'new_assignee_id' => $newAssignee->id,
         ]);
 
+        $this->runtimeEvents->dispatch($instanceStep->instance, WorkflowActionType::Reassigned, $instanceStep, array_values(array_filter([
+            $previousAssigneeId,
+            $newAssignee->id,
+        ])));
+
         return $instanceStep->refresh();
     }
 
     public function comment(InstanceStep $instanceStep, User $actor, string $comment): WorkflowAction
     {
-        return $this->recordAction($instanceStep->instance, $instanceStep, $actor, WorkflowActionType::Commented, [
+        $action = $this->recordAction($instanceStep->instance, $instanceStep, $actor, WorkflowActionType::Commented, [
             'comment' => $comment,
         ]);
+
+        $this->runtimeEvents->dispatch($instanceStep->instance, WorkflowActionType::Commented, $instanceStep);
+
+        return $action;
     }
 
     private function activateStep(WorkflowInstance $instance, WorkflowStep $step): InstanceStep
