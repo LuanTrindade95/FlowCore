@@ -26,65 +26,88 @@ class DemoWorkflowSeeder extends Seeder
 {
     public function run(): void
     {
-        $approver = User::role('approver')->firstOrFail();
-        $requester = User::role('requester')->firstOrFail();
+        $approver = User::role('approver')->where('email', 'approver@demo.com')->firstOrFail();
+        $requester = User::role('requester')->where('email', 'requester@demo.com')->firstOrFail();
 
-        $purchase = WorkflowDefinition::create([
-            'name' => 'Aprovacao de Compra',
-            'slug' => 'aprovacao-de-compra',
-            'description' => 'Fluxo com etapa adicional de financeiro para compras acima do limite.',
-            'version' => 1,
-            'status' => WorkflowDefinitionStatus::Published,
-            'category' => 'Financeiro',
+        $purchase = $this->definition(
+            'Aprovacao de Compra',
+            'aprovacao-de-compra',
+            'Fluxo com etapa adicional de financeiro para compras acima do limite.',
+            'Financeiro'
+        );
+        $this->resetSeededRuntimeExamples($purchase);
+
+        $purchaseManager = $this->step($purchase, 'manager_approval', 'Aprovacao do Gestor', WorkflowStepType::Approval, 1, true, 24);
+        $purchaseFinance = $this->step($purchase, 'finance_approval', 'Aprovacao Financeira', WorkflowStepType::Approval, 2, false, 12);
+        $purchaseNotification = $this->step($purchase, 'purchase_completed', 'Notificacao de Conclusao', WorkflowStepType::Notification, 3, false);
+
+        $this->syncApprovers($purchaseManager, [
+            [AssigneeType::Dynamic, 'requester_manager', ApprovalMode::Any, null],
+        ]);
+        $this->syncApprovers($purchaseFinance, [
+            [AssigneeType::Role, 'approver', ApprovalMode::Quorum, 1],
         ]);
 
-        $purchaseManager = $this->createStep($purchase, 'manager_approval', 'Aprovacao do Gestor', WorkflowStepType::Approval, 1, true, 24);
-        $purchaseFinance = $this->createStep($purchase, 'finance_approval', 'Aprovacao Financeira', WorkflowStepType::Approval, 2, false, 12);
-        $purchaseNotification = $this->createStep($purchase, 'purchase_completed', 'Notificacao de Conclusao', WorkflowStepType::Notification, 3, false);
-
-        $this->createApprover($purchaseManager, AssigneeType::Dynamic, 'requester_manager', ApprovalMode::Any);
-        $this->createApprover($purchaseFinance, AssigneeType::Role, 'approver', ApprovalMode::Quorum, 1);
-
-        $this->createField($purchase, 'amount', 'Valor da compra', FormFieldType::Number, true, 1);
-        $this->createField($purchase, 'supplier', 'Fornecedor', FormFieldType::Text, true, 2);
-        $this->createField($purchase, 'cost_center', 'Centro de custo', FormFieldType::Select, true, 3, [
+        $this->field($purchase, 'amount', 'Valor da compra', FormFieldType::Number, true, 1);
+        $this->field($purchase, 'supplier', 'Fornecedor', FormFieldType::Text, true, 2);
+        $this->field($purchase, 'cost_center', 'Centro de custo', FormFieldType::Select, true, 3, [
             'Tecnologia',
             'Operacoes',
             'Financeiro',
         ]);
 
-        $this->createTransition($purchase, $purchaseManager, $purchaseFinance, TransitionEvent::Approved, 'amount > 1000');
-        $this->createTransition($purchase, $purchaseManager, $purchaseNotification, TransitionEvent::Approved, 'amount <= 1000');
-        $this->createTransition($purchase, $purchaseFinance, $purchaseNotification, TransitionEvent::Approved);
-
-        $vacation = WorkflowDefinition::create([
-            'name' => 'Pedido de Ferias',
-            'slug' => 'pedido-de-ferias',
-            'description' => 'Fluxo de ferias com aprovacao do gestor e validacao de RH.',
-            'version' => 1,
-            'status' => WorkflowDefinitionStatus::Published,
-            'category' => 'RH',
+        $this->syncTransitions($purchase, [
+            [$purchaseManager, $purchaseFinance, TransitionEvent::Approved, 'amount > 1000'],
+            [$purchaseManager, $purchaseNotification, TransitionEvent::Approved, 'amount <= 1000'],
+            [$purchaseFinance, $purchaseNotification, TransitionEvent::Approved, null],
         ]);
 
-        $vacationManager = $this->createStep($vacation, 'manager_approval', 'Aprovacao do Gestor', WorkflowStepType::Approval, 1, true, 48);
-        $vacationHr = $this->createStep($vacation, 'hr_review', 'Conferencia do RH', WorkflowStepType::Task, 2, false, 24);
-        $vacationNotification = $this->createStep($vacation, 'vacation_completed', 'Notificacao ao Solicitante', WorkflowStepType::Notification, 3, false);
+        $vacation = $this->definition(
+            'Pedido de Ferias',
+            'pedido-de-ferias',
+            'Fluxo de ferias com aprovacao do gestor e validacao de RH.',
+            'RH'
+        );
+        $this->resetSeededRuntimeExamples($vacation);
 
-        $this->createApprover($vacationManager, AssigneeType::Dynamic, 'requester_manager', ApprovalMode::All);
-        $this->createApprover($vacationHr, AssigneeType::Role, 'approver', ApprovalMode::Any);
+        $vacationManager = $this->step($vacation, 'manager_approval', 'Aprovacao do Gestor', WorkflowStepType::Approval, 1, true, 48);
+        $vacationHr = $this->step($vacation, 'hr_review', 'Conferencia do RH', WorkflowStepType::Task, 2, false, 24);
+        $vacationNotification = $this->step($vacation, 'vacation_completed', 'Notificacao ao Solicitante', WorkflowStepType::Notification, 3, false);
 
-        $this->createField($vacation, 'start_date', 'Data inicial', FormFieldType::Date, true, 1);
-        $this->createField($vacation, 'end_date', 'Data final', FormFieldType::Date, true, 2);
-        $this->createField($vacation, 'reason', 'Observacao', FormFieldType::Textarea, false, 3);
+        $this->syncApprovers($vacationManager, [
+            [AssigneeType::Dynamic, 'requester_manager', ApprovalMode::All, null],
+        ]);
+        $this->syncApprovers($vacationHr, [
+            [AssigneeType::Role, 'approver', ApprovalMode::Any, null],
+        ]);
 
-        $this->createTransition($vacation, $vacationManager, $vacationHr, TransitionEvent::Approved);
-        $this->createTransition($vacation, $vacationHr, $vacationNotification, TransitionEvent::Completed);
+        $this->field($vacation, 'start_date', 'Data inicial', FormFieldType::Date, true, 1);
+        $this->field($vacation, 'end_date', 'Data final', FormFieldType::Date, true, 2);
+        $this->field($vacation, 'reason', 'Observacao', FormFieldType::Textarea, false, 3);
+
+        $this->syncTransitions($vacation, [
+            [$vacationManager, $vacationHr, TransitionEvent::Approved, null],
+            [$vacationHr, $vacationNotification, TransitionEvent::Completed, null],
+        ]);
 
         $this->createRuntimeExamples($purchase, $purchaseManager, $purchaseFinance, $requester, $approver, 5);
         $this->createRuntimeExamples($vacation, $vacationManager, $vacationHr, $requester, $approver, 5);
     }
 
-    private function createStep(
+    private function definition(string $name, string $slug, string $description, string $category): WorkflowDefinition
+    {
+        return WorkflowDefinition::updateOrCreate(
+            ['slug' => $slug, 'version' => 1],
+            [
+                'name' => $name,
+                'description' => $description,
+                'status' => WorkflowDefinitionStatus::Published,
+                'category' => $category,
+            ]
+        );
+    }
+
+    private function step(
         WorkflowDefinition $definition,
         string $key,
         string $name,
@@ -93,38 +116,44 @@ class DemoWorkflowSeeder extends Seeder
         bool $isStart,
         ?int $slaHours = null,
     ): WorkflowStep {
-        return WorkflowStep::create([
-            'workflow_definition_id' => $definition->id,
-            'key' => $key,
-            'name' => $name,
-            'type' => $type,
-            'order' => $order,
-            'config' => [],
-            'sla_hours' => $slaHours,
-            'is_start' => $isStart,
-        ]);
-    }
-
-    private function createApprover(
-        WorkflowStep $step,
-        AssigneeType $assigneeType,
-        string $assigneeRef,
-        ApprovalMode $approvalMode,
-        ?int $quorumN = null,
-    ): void {
-        StepApprover::create([
-            'workflow_step_id' => $step->id,
-            'assignee_type' => $assigneeType,
-            'assignee_ref' => $assigneeRef,
-            'approval_mode' => $approvalMode,
-            'quorum_n' => $quorumN,
-        ]);
+        return WorkflowStep::updateOrCreate(
+            [
+                'workflow_definition_id' => $definition->id,
+                'key' => $key,
+            ],
+            [
+                'name' => $name,
+                'type' => $type,
+                'order' => $order,
+                'config' => [],
+                'sla_hours' => $slaHours,
+                'is_start' => $isStart,
+            ]
+        );
     }
 
     /**
-     * @param  array<string, mixed>|null  $options
+     * @param  list<array{0: AssigneeType, 1: string, 2: ApprovalMode, 3: int|null}>  $approvers
      */
-    private function createField(
+    private function syncApprovers(WorkflowStep $step, array $approvers): void
+    {
+        $step->approvers()->delete();
+
+        foreach ($approvers as [$assigneeType, $assigneeRef, $approvalMode, $quorumN]) {
+            StepApprover::create([
+                'workflow_step_id' => $step->id,
+                'assignee_type' => $assigneeType,
+                'assignee_ref' => $assigneeRef,
+                'approval_mode' => $approvalMode,
+                'quorum_n' => $quorumN,
+            ]);
+        }
+    }
+
+    /**
+     * @param  array<int, string>|null  $options
+     */
+    private function field(
         WorkflowDefinition $definition,
         string $key,
         string $label,
@@ -133,31 +162,52 @@ class DemoWorkflowSeeder extends Seeder
         int $order,
         ?array $options = null,
     ): void {
-        FormField::create([
-            'workflow_definition_id' => $definition->id,
-            'key' => $key,
-            'label' => $label,
-            'type' => $type,
-            'required' => $required,
-            'options' => $options,
-            'order' => $order,
-        ]);
+        FormField::updateOrCreate(
+            [
+                'workflow_definition_id' => $definition->id,
+                'key' => $key,
+            ],
+            [
+                'label' => $label,
+                'type' => $type,
+                'required' => $required,
+                'options' => $options,
+                'order' => $order,
+            ]
+        );
     }
 
-    private function createTransition(
-        WorkflowDefinition $definition,
-        WorkflowStep $from,
-        WorkflowStep $to,
-        TransitionEvent $event,
-        ?string $condition = null,
-    ): void {
-        WorkflowTransition::create([
-            'workflow_definition_id' => $definition->id,
-            'from_step_id' => $from->id,
-            'to_step_id' => $to->id,
-            'on_event' => $event,
-            'condition_expression' => $condition,
-        ]);
+    /**
+     * @param  list<array{0: WorkflowStep, 1: WorkflowStep, 2: TransitionEvent, 3: string|null}>  $transitions
+     */
+    private function syncTransitions(WorkflowDefinition $definition, array $transitions): void
+    {
+        $definition->transitions()->delete();
+
+        foreach ($transitions as [$from, $to, $event, $condition]) {
+            WorkflowTransition::create([
+                'workflow_definition_id' => $definition->id,
+                'from_step_id' => $from->id,
+                'to_step_id' => $to->id,
+                'on_event' => $event,
+                'condition_expression' => $condition,
+            ]);
+        }
+    }
+
+    private function resetSeededRuntimeExamples(WorkflowDefinition $definition): void
+    {
+        $seededInstanceIds = WorkflowAction::query()
+            ->whereIn('workflow_instance_id', $definition->instances()->pluck('id'))
+            ->get()
+            ->filter(fn (WorkflowAction $action): bool => ($action->payload['seeded'] ?? false) === true)
+            ->pluck('workflow_instance_id')
+            ->unique()
+            ->values();
+
+        if ($seededInstanceIds->isNotEmpty()) {
+            WorkflowInstance::whereKey($seededInstanceIds)->delete();
+        }
     }
 
     private function createRuntimeExamples(
@@ -188,10 +238,7 @@ class DemoWorkflowSeeder extends Seeder
                 'requester_id' => $requester->id,
                 'status' => $status,
                 'current_step_id' => $currentStep?->id,
-                'data' => [
-                    'amount' => 750 + ($index * 250),
-                    'seed_index' => $index,
-                ],
+                'data' => $this->runtimeData($definition, $index),
                 'started_at' => now()->subDays($index + 1),
                 'finished_at' => $status === WorkflowInstanceStatus::Running ? null : now()->subDays($index),
             ]);
@@ -218,5 +265,27 @@ class DemoWorkflowSeeder extends Seeder
                 'payload' => ['seeded' => true],
             ]);
         }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function runtimeData(WorkflowDefinition $definition, int $index): array
+    {
+        if ($definition->slug === 'pedido-de-ferias') {
+            return [
+                'start_date' => now()->addDays(15 + $index)->toDateString(),
+                'end_date' => now()->addDays(20 + $index)->toDateString(),
+                'reason' => 'Planejamento anual de descanso',
+                'seed_index' => $index,
+            ];
+        }
+
+        return [
+            'amount' => 750 + ($index * 250),
+            'supplier' => ['Atlas Cloud', 'Nexa Office', 'Vector Labs', 'Prime Facilities', 'DataBridge'][$index % 5],
+            'cost_center' => ['Tecnologia', 'Operacoes', 'Financeiro'][$index % 3],
+            'seed_index' => $index,
+        ];
     }
 }

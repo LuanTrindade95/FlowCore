@@ -11,26 +11,30 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RbacSeeder::class);
 
-        User::firstOrCreate(
-            ['email' => 'admin@demo.com'],
-            ['name' => 'Admin Demo', 'password' => 'password']
-        )->assignRole('admin');
+        $this->demoUser('Admin Demo', 'admin@demo.com', 'admin');
+        $this->demoUser('Aprovador Demo', 'approver@demo.com', 'approver');
+        $this->demoUser('Solicitante Demo', 'requester@demo.com', 'requester');
 
-        User::firstOrCreate(
-            ['email' => 'approver@demo.com'],
-            ['name' => 'Aprovador Demo', 'password' => 'password']
-        )->assignRole('approver');
-
-        User::firstOrCreate(
-            ['email' => 'requester@demo.com'],
-            ['name' => 'Solicitante Demo', 'password' => 'password']
-        )->assignRole('requester');
-
-        User::factory(7)->create()->each(fn (User $user) => $user->assignRole(fake()->randomElement([
-            'approver',
-            'requester',
-        ])));
+        $this->demoUser('Marina Financeiro', 'marina.financeiro@demo.com', 'approver');
+        $this->demoUser('Rafael Operacoes', 'rafael.operacoes@demo.com', 'approver');
+        $this->demoUser('Bianca RH', 'bianca.rh@demo.com', 'approver');
+        $this->demoUser('Caio Tecnologia', 'caio.tecnologia@demo.com', 'requester');
+        $this->demoUser('Nadia Produto', 'nadia.produto@demo.com', 'requester');
+        $this->demoUser('Otavio Compras', 'otavio.compras@demo.com', 'requester');
+        $this->demoUser('Helena Juridico', 'helena.juridico@demo.com', 'approver');
 
         $this->call(DemoWorkflowSeeder::class);
+    }
+
+    private function demoUser(string $name, string $email, string $role): User
+    {
+        $user = User::updateOrCreate(
+            ['email' => $email],
+            ['name' => $name, 'password' => 'password']
+        );
+
+        $user->syncRoles([$role]);
+
+        return $user;
     }
 }
