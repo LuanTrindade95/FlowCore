@@ -388,3 +388,25 @@ Adicionar `workflow:escalate-overdue` agendado a cada minuto, com `lockForUpdate
 - O comando pode rodar repetidamente sem reescalar o mesmo step.
 - Falhas de broadcast aparecem na operacao que disparou o evento em vez de ficarem silenciosas na fila.
 - O payload realtime permanece pequeno e carrega apenas ids, acao e timestamp; dados completos continuam vindo das APIs runtime.
+
+## ADR-23 - Seed demo deterministica para vitrine de portfolio
+
+### Contexto
+
+A Fase 6 transforma o FlowCore em uma vitrine tecnica reproduzivel. A seed anterior criava usuarios aleatorios e duplicava workflows/instancias a cada execucao, o que degradava dashboards, screenshots e avaliacao tecnica depois de resetar o ambiente.
+
+### Decisao
+
+Tornar `DatabaseSeeder` e `DemoWorkflowSeeder` deterministicos:
+
+- usuarios demo sao criados/atualizados por e-mail e recebem roles via `syncRoles`;
+- definicoes, steps e campos sao sincronizados por chaves estaveis;
+- approvers e transitions do dataset demo sao recriados a partir da fonte declarativa da seed;
+- exemplos runtime gerados pela seed recebem marcador `payload.seeded=true` em `workflow_actions`;
+- apenas instancias marcadas como seedadas sao removidas/recriadas, preservando instancias manuais do avaliador.
+
+### Consequencias
+
+- `php artisan db:seed --force` pode ser executado repetidamente sem inflar contagens.
+- O ambiente local sempre volta para um estado de demonstracao conhecido.
+- Edicoes manuais feitas sobre as definicoes demo podem ser sobrescritas pela seed, o que e aceitavel para uma vitrine local e deve ser tratado por outro dataset caso o produto evolua para staging compartilhado.
