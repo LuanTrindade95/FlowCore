@@ -25,14 +25,14 @@ import { ButtonDirective, FormControlDirective, StatusPillComponent } from '../.
                 <p class="text-xs text-slate-500">Processos empresariais</p>
               </div>
             </div>
-            <app-status-pill label="MVP interno" tone="info" />
+            <app-status-pill label="Demo tecnica" tone="info" />
           </header>
 
           <div class="mx-auto w-full max-w-md py-12">
-            <p class="text-sm font-semibold uppercase tracking-[0.14em] text-blue-600">Acesso seguro</p>
+            <p class="text-sm font-semibold uppercase tracking-[0.14em] text-blue-600">Plataforma operacional</p>
             <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Entre no painel operacional</h1>
             <p class="mt-3 text-sm leading-6 text-slate-600">
-              Use uma conta com permissões para administrar workflows, acompanhar requisições e tratar pendências.
+              Explore a vitrine com perfis reais de administrador, aprovador e solicitante.
             </p>
 
             <form class="mt-8 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
@@ -47,7 +47,7 @@ import { ButtonDirective, FormControlDirective, StatusPillComponent } from '../.
                   placeholder="admin@demo.com"
                 />
                 @if (showEmailError()) {
-                  <span class="mt-1 block text-xs text-red-600">Informe um e-mail válido.</span>
+                  <span class="mt-1 block text-xs text-red-600">Informe um e-mail valido.</span>
                 }
               </label>
 
@@ -78,7 +78,7 @@ import { ButtonDirective, FormControlDirective, StatusPillComponent } from '../.
             </form>
           </div>
 
-          <p class="text-xs text-slate-500">Locale pt-BR ativo para datas, moedas e validações de interface.</p>
+          <p class="text-xs text-slate-500">Dados demo idempotentes, RBAC real e runtime pronto para avaliacao.</p>
         </div>
 
         <aside class="hidden border-l border-slate-200 bg-white p-10 lg:flex lg:flex-col lg:justify-center">
