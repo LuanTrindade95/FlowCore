@@ -6,6 +6,6 @@ Fila FIFO de lacunas que precisam ser confirmadas para manter o Brain fiel ao pr
 
 - [ ] Confirmar o nome do owner a ser usado no front-matter dos documentos canonicos. Valor inicial usado: `LuanTrindade95`.
 - [ ] Decidir se o pacote operacional de prompts deve ser versionado dentro do repositorio ou continuar como referencia externa em `Downloads`.
-- [ ] Definir backlog tecnico inicial antes da implementacao.
+- [ ] Definir backlog tecnico inicial pos-Fase 6.
 - [ ] Confirmar como Obsidian sera usado na pratica: apenas templates dentro do repositorio ou tambem vault/configuracao local fora do Git.
-- [ ] Decidir se vulnerabilidades dev-only apontadas por `npm audit` completo devem ser tratadas na Fase 6 ou aceitas enquanto `npm audit --omit=dev` estiver limpo.
+- [ ] Decidir se vulnerabilidades dev-only apontadas por `npm audit` completo devem ser tratadas em hardening futuro ou aceitas enquanto `npm audit --omit=dev` estiver limpo.

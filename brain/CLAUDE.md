@@ -6,7 +6,7 @@ Este arquivo define como agentes de IA devem trabalhar no FlowCore.
 
 FlowCore e uma plataforma de automacao de processos empresariais configuraveis. Empresas usam o sistema para criar e executar fluxos de solicitacao, aprovacao e operacoes internas sem alterar codigo.
 
-O projeto esta em fase greenfield: ideia validada e arquitetura conceitual definida, sem implementacao tecnica iniciada.
+O projeto ja possui implementacao full stack validada localmente ate a Fase 6 do build-loop, com backend Laravel, frontend Angular, Workflow Engine configuravel, runtime operacional, realtime e seed demo idempotente.
 
 ## Hierarquia De Confianca
 

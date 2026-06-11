@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime e automacoes realtime de SLA implementadas e validadas localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime, automacoes realtime de SLA e polish de vitrine implementados e validados localmente.
 
 Existe no repositorio:
 
@@ -24,6 +24,7 @@ Existe no repositorio:
   - `docs/VISION.md`
   - `docs/DECISIONS.md`
   - `docs/PROGRESS.md`
+  - `docs/ARCHITECTURE.md`
 - Backend Laravel 12 em `backend/`.
 - Frontend Angular 19 standalone em `frontend/`.
 - Infra local com Docker Compose, MySQL 8, Redis 7, Horizon, Reverb e frontend.
@@ -94,12 +95,20 @@ Existe no repositorio:
   - `RuntimeEventDispatcher` calculando solicitante, admins, assignee aberto e aprovadores resolvidos
   - frontend com `RuntimeRealtimeService` e refresh automatico de inbox, detalhe e dashboard
   - E2E local validou request `#77` mudando de `Pendente` para `Escalada` sem reload manual
+- Fase 6 - Polish & Vitrine:
+  - README principal reescrito como material de avaliacao tecnica do portfolio
+  - `docs/ARCHITECTURE.md` documentando camadas, dominio, realtime, seed, seguranca e trade-offs
+  - seed demo deterministica e idempotente para usuarios, workflows, steps, approvers, campos, transitions e instancias runtime seedadas
+  - teste `DemoSeederTest` garantindo estabilidade do dataset demo em execucoes repetidas
+  - tela de login alinhada ao posicionamento de demo tecnica
+  - E2E local validou login, dashboard, workflows publicados e login mobile sem overflow
 
 Ainda nao existe:
 
-- Arquitetura tecnica detalhada fora da visao inicial.
 - Fluxos completos do produto fora do roadmap faseado.
 - Backlog tecnico.
+- Deploy publico/staging versionado.
+- Screenshots versionados no repositorio.
 
 ## Contexto Confirmado
 
@@ -133,11 +142,14 @@ Ainda nao existe:
 - A Fase 5 definiu `/api/broadcasting/auth` como endpoint JSON de autorizacao Reverb para a SPA.
 - A Fase 5 definiu `ShouldBroadcastNow` para eventos pequenos de refresh operacional.
 - A Fase 5 definiu escalonamento de SLA idempotente por comando agendado com lock pessimista.
+- A Fase 6 definiu seed demo deterministica como base de vitrine reproduzivel.
+- A Fase 6 definiu que apenas instancias com marcador `payload.seeded=true` em `workflow_actions` podem ser removidas/recriadas pela seed demo.
 
 ## Em Progresso
 
-- Execucao auditada das fases do FlowCore a partir do pacote de prompts.
-- Fase atual: Fase 5 auditada na branch `feature/realtime-automation`; proxima fase planejada e Fase 6 - Polish & Vitrine.
+Fase 6 concluida e auditada na branch `feature/portfolio-polish`.
+
+Proxima etapa depende de decisao do PO: abrir fase de deploy/staging, criar backlog tecnico formal, versionar evidencias visuais ou iniciar hardening de producao.
 
 ## Bloqueios
 

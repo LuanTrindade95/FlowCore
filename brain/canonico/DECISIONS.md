@@ -205,3 +205,15 @@ Por que: o scheduler pode rodar repetidamente e em paralelo sem duplicar auditor
 Decisao: `RuntimeWorkflowUpdated` usa `ShouldBroadcastNow`.
 
 Por que: eventos pequenos de refresh operacional precisam chegar imediatamente ao inbox/detalhe/dashboard e falhas de broadcast devem aparecer no fluxo que disparou a atualizacao.
+
+## 2026-06-11 - Seed demo deterministica para portfolio
+
+Decisao: `DatabaseSeeder` e `DemoWorkflowSeeder` passam a sincronizar usuarios e definicoes por chaves estaveis, removendo/recriando apenas instancias runtime marcadas como seedadas.
+
+Por que: o FlowCore precisa de um dataset de vitrine reproduzivel para E2E, README, screenshots e avaliacao tecnica, sem duplicar workflows ou usuarios a cada `php artisan db:seed`.
+
+## 2026-06-11 - Instancias manuais preservadas pela seed
+
+Decisao: a seed demo identifica exemplos runtime por `workflow_actions.payload.seeded=true`; instancias sem esse marcador nao sao removidas.
+
+Por que: avaliadores podem criar solicitacoes durante a demo, e uma nova seed nao deve apagar dados manuais sem um reset explicito do banco.
