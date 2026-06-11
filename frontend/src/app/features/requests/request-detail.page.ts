@@ -1,9 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { DatePipe, KeyValuePipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LucideArrowLeft } from '@lucide/angular';
 
 import { ToastService } from '../../core/feedback/toast.service';
+import { RuntimeRealtimeService } from '../../core/realtime/runtime-realtime.service';
 import { CardComponent, StatusPillComponent, TimelineComponent } from '../../shared/ui';
 import { RuntimeApiService } from '../runtime/data/runtime-api.service';
 import { WorkflowInstance, WorkflowInstanceStatus } from '../runtime/data/runtime.types';
@@ -63,15 +65,28 @@ import { workflowActionsToTimeline, workflowStatusLabel } from '../runtime/runti
 })
 export class RequestDetailPageComponent {
   private readonly api = inject(RuntimeApiService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly realtime = inject(RuntimeRealtimeService);
   private readonly route = inject(ActivatedRoute);
   private readonly toast = inject(ToastService);
+  private readonly requestId = Number(this.route.snapshot.paramMap.get('id'));
 
   protected readonly request = signal<WorkflowInstance | null>(null);
   protected readonly timeline = computed(() => workflowActionsToTimeline(this.request()?.actions ?? []));
 
   constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.api.getRequest(id).subscribe({
+    this.load();
+    this.realtime.runtimeUpdates().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (event) => {
+        if (event.workflow_instance_id === this.requestId) {
+          this.load();
+        }
+      },
+    });
+  }
+
+  private load(): void {
+    this.api.getRequest(this.requestId).subscribe({
       next: (request) => this.request.set(request),
       error: () => this.toast.danger('Nao foi possivel carregar a solicitacao.'),
     });

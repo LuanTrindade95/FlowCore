@@ -1,6 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ToastService } from '../../core/feedback/toast.service';
+import { RuntimeRealtimeService } from '../../core/realtime/runtime-realtime.service';
 import { CardComponent, DataTableComponent } from '../../shared/ui';
 import { RuntimeApiService } from '../runtime/data/runtime-api.service';
 import { DashboardMetrics } from '../runtime/data/runtime.types';
@@ -32,6 +34,8 @@ import { DashboardMetrics } from '../runtime/data/runtime.types';
 })
 export class DashboardPageComponent {
   private readonly api = inject(RuntimeApiService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly realtime = inject(RuntimeRealtimeService);
   private readonly toast = inject(ToastService);
 
   protected readonly String = String;
@@ -42,6 +46,13 @@ export class DashboardPageComponent {
   ];
 
   constructor() {
+    this.load();
+    this.realtime.runtimeUpdates().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => this.load(),
+    });
+  }
+
+  private load(): void {
     this.api.dashboard().subscribe({
       next: (metrics) => this.metrics.set(metrics),
       error: () => this.toast.danger('Nao foi possivel carregar os indicadores.'),

@@ -1,11 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideCheck, LucideMessageSquare, LucideRefreshCw, LucideUserRoundCog, LucideX } from '@lucide/angular';
 import { finalize, forkJoin, Observable } from 'rxjs';
 
 import { ToastService } from '../../core/feedback/toast.service';
+import { RuntimeRealtimeService } from '../../core/realtime/runtime-realtime.service';
 import { ButtonDirective, CardComponent, EmptyStateComponent, FormControlDirective, ModalComponent, StatusPillComponent } from '../../shared/ui';
 import { RuntimeApiService } from '../runtime/data/runtime-api.service';
 import { InstanceStep, UserSummary } from '../runtime/data/runtime.types';
@@ -109,6 +111,8 @@ type InboxAction = 'approve' | 'reject' | 'comment' | 'reassign';
 })
 export class InboxPageComponent {
   private readonly api = inject(RuntimeApiService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly realtime = inject(RuntimeRealtimeService);
   private readonly toast = inject(ToastService);
 
   protected readonly steps = signal<InstanceStep[]>([]);
@@ -133,6 +137,9 @@ export class InboxPageComponent {
 
   constructor() {
     this.load();
+    this.realtime.runtimeUpdates().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => this.load(),
+    });
   }
 
   protected load(): void {

@@ -10,6 +10,7 @@ import {
 } from '@lucide/angular';
 
 import { AuthService } from '../../core/auth/auth.service';
+import { RuntimeRealtimeService } from '../../core/realtime/runtime-realtime.service';
 import { ButtonDirective, StatusPillComponent } from '../../shared/ui';
 
 interface ShellNavItem {
@@ -136,6 +137,7 @@ interface ShellNavItem {
 })
 export class AppShellComponent {
   protected readonly auth = inject(AuthService);
+  private readonly realtime = inject(RuntimeRealtimeService);
   private readonly router = inject(Router);
 
   protected readonly navItems: ShellNavItem[] = [
@@ -150,6 +152,7 @@ export class AppShellComponent {
   }
 
   logout(): void {
+    this.realtime.disconnect();
     this.auth.logout().subscribe({
       next: () => void this.router.navigate(['/login']),
       error: () => void this.router.navigate(['/login']),
