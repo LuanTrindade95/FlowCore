@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BroadcastAuthController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\FormFieldController;
 use App\Http\Controllers\Api\V1\RuntimeAssigneeController;
@@ -15,6 +16,8 @@ use App\Models\WorkflowInstance;
 use Illuminate\Support\Facades\Route;
 
 Route::model('workflowRequest', WorkflowInstance::class);
+
+Route::post('broadcasting/auth', BroadcastAuthController::class)->middleware('auth:sanctum');
 
 Route::prefix('v1')->group(function () {
     Route::post('auth/login', [AuthController::class, 'login'])->middleware('guest');

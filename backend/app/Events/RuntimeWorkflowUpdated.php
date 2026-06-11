@@ -5,11 +5,11 @@ namespace App\Events;
 use App\Domain\Workflow\Enums\WorkflowActionType;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RuntimeWorkflowUpdated implements ShouldBroadcast
+class RuntimeWorkflowUpdated implements ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;

@@ -143,12 +143,14 @@ it('authorizes only the authenticated user runtime channel', function () {
     $other = realtimeAutomationUser('approver');
     $token = $user->createToken('broadcast-test')->plainTextToken;
 
-    $this->withToken($token)->postJson('/broadcasting/auth', [
+    $this->withToken($token)->postJson('/api/broadcasting/auth', [
         'socket_id' => '123.456',
         'channel_name' => "private-users.{$user->id}.runtime",
-    ])->assertOk();
+    ])
+        ->assertOk()
+        ->assertJsonStructure(['auth']);
 
-    $this->withToken($token)->postJson('/broadcasting/auth', [
+    $this->withToken($token)->postJson('/api/broadcasting/auth', [
         'socket_id' => '123.456',
         'channel_name' => "private-users.{$other->id}.runtime",
     ])->assertForbidden();

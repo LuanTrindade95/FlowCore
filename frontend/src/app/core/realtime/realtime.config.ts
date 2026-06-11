@@ -18,7 +18,7 @@ export const FLOWCORE_REALTIME_CONFIG = new InjectionToken<RealtimeConfig>('FLOW
 
     return {
       appKey: 'flowcore-local-key',
-      authEndpoint: apiBaseUrl.replace('/api/v1', '/broadcasting/auth'),
+      authEndpoint: apiBaseUrl.replace('/api/v1', '/api/broadcasting/auth'),
       wsHost: 'localhost',
       wsPort: 8080,
       forceTls: false,
