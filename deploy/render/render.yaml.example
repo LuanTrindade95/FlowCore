@@ -50,6 +50,10 @@ services:
         sync: false
       - key: REDIS_PASSWORD
         sync: false
+      - key: REDIS_USERNAME
+        sync: false
+      - key: REDIS_SCHEME
+        value: tls
       - key: SESSION_DRIVER
         value: redis
       - key: CACHE_STORE
@@ -142,6 +146,10 @@ envVarGroups:
         sync: false
       - key: REDIS_PASSWORD
         sync: false
+      - key: REDIS_USERNAME
+        sync: false
+      - key: REDIS_SCHEME
+        value: tls
       - key: SESSION_DRIVER
         value: redis
       - key: CACHE_STORE

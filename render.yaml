@@ -23,31 +23,35 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_URL
-        sync: false
+        value: https://flowcore-api-urkx.onrender.com
       - key: FRONTEND_URL
-        sync: false
+        value: https://flowcore-luantrindade.netlify.app
       - key: FRONTEND_URLS
-        sync: false
+        value: https://flowcore-luantrindade.netlify.app
       - key: APP_KEY
         sync: false
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        sync: false
+        value: portfolio-portfolio-01.l.aivencloud.com
       - key: DB_PORT
-        sync: false
+        value: "27717"
       - key: DB_DATABASE
-        sync: false
+        value: flowcore_staging
       - key: DB_USERNAME
-        sync: false
+        value: flowcore_app
       - key: DB_PASSWORD
         sync: false
       - key: REDIS_CLIENT
         value: phpredis
       - key: REDIS_HOST
-        sync: false
+        value: flowcore-valkey-portfolio-01.a.aivencloud.com
       - key: REDIS_PORT
-        sync: false
+        value: "27718"
+      - key: REDIS_USERNAME
+        value: default
+      - key: REDIS_SCHEME
+        value: tls
       - key: REDIS_PASSWORD
         sync: false
       - key: SESSION_DRIVER
@@ -65,9 +69,9 @@ services:
       - key: REVERB_APP_SECRET
         sync: false
       - key: REVERB_HOST
-        sync: false
+        value: flowcore-reverb.onrender.com
       - key: REVERB_BROADCAST_HOST
-        sync: false
+        value: flowcore-reverb.onrender.com
       - key: REVERB_PORT
         value: "443"
       - key: REVERB_SCHEME
@@ -125,21 +129,25 @@ envVarGroups:
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        sync: false
+        value: portfolio-portfolio-01.l.aivencloud.com
       - key: DB_PORT
-        sync: false
+        value: "27717"
       - key: DB_DATABASE
-        sync: false
+        value: flowcore_staging
       - key: DB_USERNAME
-        sync: false
+        value: flowcore_app
       - key: DB_PASSWORD
         sync: false
       - key: REDIS_CLIENT
         value: phpredis
       - key: REDIS_HOST
-        sync: false
+        value: flowcore-valkey-portfolio-01.a.aivencloud.com
       - key: REDIS_PORT
-        sync: false
+        value: "27718"
+      - key: REDIS_USERNAME
+        value: default
+      - key: REDIS_SCHEME
+        value: tls
       - key: REDIS_PASSWORD
         sync: false
       - key: SESSION_DRIVER
@@ -157,9 +165,9 @@ envVarGroups:
       - key: REVERB_APP_SECRET
         sync: false
       - key: REVERB_HOST
-        sync: false
+        value: flowcore-reverb.onrender.com
       - key: REVERB_BROADCAST_HOST
-        sync: false
+        value: flowcore-reverb.onrender.com
       - key: REVERB_PORT
         value: "443"
       - key: REVERB_SCHEME

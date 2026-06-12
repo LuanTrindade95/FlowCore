@@ -42,6 +42,7 @@ return [
                 'channel' => env('REVERB_SCALING_CHANNEL', 'reverb'),
                 'server' => [
                     'url' => env('REDIS_URL'),
+                    'scheme' => env('REDIS_SCHEME', 'tcp'),
                     'host' => env('REDIS_HOST', '127.0.0.1'),
                     'port' => env('REDIS_PORT', '6379'),
                     'username' => env('REDIS_USERNAME'),
