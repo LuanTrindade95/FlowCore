@@ -6,7 +6,7 @@ status: canonico
 
 # Known Issues
 
-Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 7.
+Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 8.
 
 ## Limitacoes Atuais
 
@@ -23,6 +23,7 @@ Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 7.
 - O ambiente de E2E local depende de usuarios demo, RBAC e workflows publicados. A seed idempotente cobre o estado demo local, mas staging publico ainda precisa de estrategia propria de dados.
 - O endpoint realtime usa explicitamente a conexao `reverb`; ambientes que alterarem o nome da conexao de broadcasting devem atualizar `BroadcastAuthController`.
 - Em Docker local, `backend/.env` ignorado precisa estar alinhado ao `.env.example` para `BROADCAST_CONNECTION`, `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET` e `REVERB_BROADCAST_HOST`; caso contrario, o servidor `artisan serve` pode divergir dos processos CLI.
-- O frontend ainda usa `http://localhost:8000/api/v1` em `frontend/src/app/core/api/api-base-url.ts`; deploy externo exige parametrizacao por ambiente.
-- O frontend ainda usa configuracao local de Reverb em `frontend/src/app/core/realtime/realtime.config.ts`; deploy externo exige parametrizacao por ambiente.
+- O deploy externo ainda depende de plataforma, workspace, Git remoto, secrets e URLs reais aprovados pelo PO.
+- `deploy/render/render.yaml.example` nao foi validado por Render CLI nem aplicado em Blueprint, por decisao de nao criar/provisionar recursos externos.
+- A politica de reset do banco demo para staging externo ainda precisa de aprovacao explicita por plataforma.
 - O runner local do `godmode-plus` foi ajustado fora do repositorio para resolver `npx` no Windows via `cmd.exe`; uma atualizacao futura da skill pode sobrescrever esse ajuste.

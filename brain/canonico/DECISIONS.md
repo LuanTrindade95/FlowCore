@@ -241,3 +241,27 @@ Por que: o portfolio precisa de uma vitrine previsivel para avaliadores, screens
 Decisao: versionar poucas imagens selecionadas em `docs/assets/screenshots/`, focadas nos fluxos de maior valor.
 
 Por que: screenshots devem sustentar avaliacao rapida do portfolio sem inflar o repositorio com capturas redundantes.
+
+## 2026-06-12 - Runtime config externo para frontend
+
+Decisao: carregar `/config.json` antes do bootstrap Angular e prover API/Reverb por tokens Angular.
+
+Por que: a SPA precisa ser configuravel por ambiente sem recompilar codigo e sem depender de `localhost` em staging.
+
+## 2026-06-12 - Falha fechada de config fora de localhost
+
+Decisao: em localhost, ausencia de `/config.json` usa defaults locais; fora de localhost, a ausencia ou erro de carga da config bloqueia o bootstrap.
+
+Por que: em ambiente externo, degradar silenciosamente para endpoints locais criaria falsa demo e falhas dificeis de diagnosticar.
+
+## 2026-06-12 - Templates de plataforma sao documentais
+
+Decisao: `netlify.toml` prepara build estatico da SPA, mas Render/Aiven ficam como template/checklist documentais ate Gate PO.
+
+Por que: Netlify config nao provisiona recurso por si so; Render Blueprint e Aiven podem criar infraestrutura e continuam bloqueados por aprovacao especifica.
+
+## 2026-06-12 - Health endpoint leve
+
+Decisao: adicionar `/health` com resposta JSON simples para checks de plataforma.
+
+Por que: Render e outras plataformas precisam de liveness HTTP sem autenticar, sem tocar banco e sem acoplar health check ao dominio runtime.

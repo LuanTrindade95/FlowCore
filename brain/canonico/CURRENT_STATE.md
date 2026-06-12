@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime, automacoes realtime de SLA, polish de vitrine e staging documentado implementados e validados localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime, automacoes realtime de SLA, polish de vitrine, staging documentado e deployment readiness implementados e validados localmente.
 
 Existe no repositorio:
 
@@ -26,8 +26,10 @@ Existe no repositorio:
   - `docs/PROGRESS.md`
   - `docs/ARCHITECTURE.md`
   - `docs/STAGING_PLAN.md`
+  - `docs/DEPLOYMENT_READINESS.md`
   - `docs/DEMO_E2E_SCRIPT.md`
   - evidencias visuais versionadas em `docs/assets/screenshots/`
+- Templates e checklists de deploy sem segredos em `deploy/`.
 - Backend Laravel 12 em `backend/`.
 - Frontend Angular 19 standalone em `frontend/`.
 - Infra local com Docker Compose, MySQL 8, Redis 7, Horizon, Reverb e frontend.
@@ -112,6 +114,17 @@ Existe no repositorio:
   - screenshots desktop versionados para login, dashboard e workflows publicados
   - README, decisoes e progresso atualizados com o status de staging documentado
   - validacao completa executada com root gates, seed Docker, Playwright e godmode verify
+- Fase 8 - Deployment Readiness:
+  - branch `feature/deployment-readiness` criada a partir de `feature/deploy-staging-evidence`
+  - frontend carrega `/config.json` antes do bootstrap Angular
+  - defaults locais continuam disponiveis para Docker/dev
+  - fora de localhost, ausencia de `/config.json` falha fechado
+  - `frontend/scripts/write-runtime-config.mjs` gera config por variaveis `FLOWCORE_*`
+  - `netlify.toml` prepara build estatico da SPA com rewrite Angular
+  - backend expoe `/health` para checks de plataforma
+  - `deploy/render/render.yaml.example` documenta Render sem ativar Blueprint real
+  - `deploy/aiven/free-tier-checklist.md` documenta MySQL/Valkey sem criar servicos
+  - exemplos de env de staging vivem em `docs/env/`
 
 Ainda nao existe:
 
@@ -156,12 +169,15 @@ Ainda nao existe:
 - A Fase 7 definiu que o staging oficial neste momento e documentado/local, sem criar recursos externos ate aprovacao especifica por plataforma.
 - A Fase 7 definiu que Netlify, Render e Aiven sao candidatos de deploy futuro, com preferencia por free tier/local e banco demo resetavel.
 - A Fase 7 definiu que poucas imagens selecionadas devem ser versionadas como evidencia de portfolio, nao um acervo completo de screenshots.
+- A Fase 8 definiu `/config.json` como contrato runtime do frontend para API e Reverb.
+- A Fase 8 definiu falha fechada fora de localhost quando a config runtime nao puder ser carregada.
+- A Fase 8 definiu que templates Render/Aiven permanecem documentais ate Gate PO especifico.
 
 ## Em Progresso
 
-Fase 7 concluida e auditada na branch `feature/deploy-staging-evidence`.
+Fase 8 concluida e auditada na branch `feature/deployment-readiness`.
 
-Proxima etapa recomendada: Fase 8 - Deployment Readiness, parametrizando frontend API/Reverb, documentando variaveis por ambiente e preparando arquivos de configuracao sem criar recursos externos.
+Proxima etapa recomendada: Fase 9 - Platform Approval + External Smoke, apenas se o PO aprovar plataforma, conta/workspace e criacao de recursos externos. Alternativa sem recursos externos: backlog tecnico formal de hardening.
 
 ## Bloqueios
 
