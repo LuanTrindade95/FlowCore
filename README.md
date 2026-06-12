@@ -153,6 +153,12 @@ Todas usam a senha `password`.
 8. Rodar `workflow:escalate-overdue` apos manipular um SLA local para validar realtime.
 9. Conferir Dashboard e detalhe da request para timeline e estado.
 
+Roteiro detalhado: [docs/DEMO_E2E_SCRIPT.md](docs/DEMO_E2E_SCRIPT.md).
+
+Evidencias visuais: [docs/assets/screenshots/README.md](docs/assets/screenshots/README.md).
+
+Plano de staging documentado: [docs/STAGING_PLAN.md](docs/STAGING_PLAN.md).
+
 ## Checks
 
 Gates agregados do monorepo:
@@ -208,6 +214,7 @@ Fase 6 adiciona:
 
 - Seed demo idempotente testado em SQLite e MySQL.
 - README e arquitetura preparados para avaliacao de portfolio.
+- Fase 7 documenta staging sem criar recursos externos e adiciona screenshots versionados.
 
 ## Estrutura
 

@@ -26,7 +26,7 @@ import { DashboardMetrics } from '../runtime/data/runtime.types';
         <app-card eyebrow="Throughput 30 dias" [title]="(metrics()?.throughput_percent ?? 0) + '%'"><p class="text-sm text-slate-600">Percentual iniciado e finalizado no periodo.</p></app-card>
       </div>
 
-      <app-card title="Volume por workflow" eyebrow="Portifolio operacional">
+      <app-card title="Volume por workflow" eyebrow="Portfolio operacional">
         <app-data-table [columns]="columns" [rows]="rows()" />
       </app-card>
     </section>

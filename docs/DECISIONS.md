@@ -410,3 +410,25 @@ Tornar `DatabaseSeeder` e `DemoWorkflowSeeder` deterministicos:
 - `php artisan db:seed --force` pode ser executado repetidamente sem inflar contagens.
 - O ambiente local sempre volta para um estado de demonstracao conhecido.
 - Edicoes manuais feitas sobre as definicoes demo podem ser sobrescritas pela seed, o que e aceitavel para uma vitrine local e deve ser tratado por outro dataset caso o produto evolua para staging compartilhado.
+
+## ADR-24 - Staging documentado antes de provisionamento externo
+
+### Contexto
+
+A Fase 7 precisava preparar o FlowCore para avaliacao externa, mas o PO restringiu a execucao a free tier/local e proibiu criacao de recursos externos sem aprovacao especifica. O projeto tambem ainda possui URLs de API e Reverb hardcoded para `localhost` no frontend.
+
+### Decisao
+
+Executar a Fase 7 como staging documentado:
+
+- nao criar contas, sites, bancos ou servicos externos;
+- documentar Netlify, Render e Aiven como candidatos de deploy;
+- manter local demo como referencia oficial ate uma fase de `deployment-readiness`;
+- versionar poucas evidencias visuais locais;
+- bloquear deploy real ate novo Gate PO.
+
+### Consequencias
+
+- O portfolio ganha runbook e evidencias sem risco de custo ou exposicao.
+- O deploy externo fica tecnicamente honesto: Netlify pode hospedar a SPA, mas precisa de backend publico; Render/Aiven entram como candidatos para servicos long-running e dados.
+- A proxima fase deve parametrizar API/Reverb no frontend antes de qualquer publicacao funcional.
