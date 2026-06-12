@@ -1,12 +1,12 @@
 # Deployment Readiness
 
-Este documento prepara a Fase 8 do FlowCore para deploy externo futuro sem criar recursos em nuvem.
+Este documento registra a prontidao de deploy do FlowCore e o estado de staging externo.
 
 ## Status
 
-- Netlify: configurado como candidato para SPA Angular estatica via `netlify.toml`.
-- Render: template documental em `deploy/render/render.yaml.example`; nao aplicar sem aprovacao do PO.
-- Aiven: checklist documental em `deploy/aiven/free-tier-checklist.md`; nao criar servicos sem aprovacao do PO.
+- Netlify: configurado como candidato para SPA Angular estatica via `netlify.toml`; site ainda nao criado porque depende das URLs publicas do Render.
+- Render: Blueprint real em `render.yaml` e template de referencia em `deploy/render/render.yaml.example`.
+- Aiven: Valkey free-tier criado para FlowCore; MySQL free-tier ja estava ocupado, entao FlowCore usa banco e usuario isolados no servico MySQL existente.
 - Frontend: configuracao runtime carregada de `/config.json`.
 - Backend: `/health` disponivel para health checks de plataforma.
 
@@ -67,7 +67,7 @@ Antes de criar site no Netlify, o PO precisa aprovar:
 
 ## Render
 
-O template `deploy/render/render.yaml.example` e apenas referencia. Ele modela:
+O Blueprint `render.yaml` modela:
 
 - API Laravel como web service Docker;
 - Horizon como worker;
@@ -77,11 +77,17 @@ O template `deploy/render/render.yaml.example` e apenas referencia. Ele modela:
 - `autoDeploy: false`;
 - banco e Valkey/Redis externos via Aiven.
 
-Nao renomear para `render.yaml` nem aplicar Blueprint sem aprovacao explicita do PO.
+O deploy Render ainda exige aplicar o Blueprint no Dashboard e preencher os segredos `sync: false` fora do Git.
 
 ## Aiven
 
-O checklist `deploy/aiven/free-tier-checklist.md` documenta MySQL e Valkey como candidatos para staging futuro. A politica de banco demo deve continuar resetavel:
+Estado configurado em `portfolio-01`:
+
+- MySQL: servico existente `portfolio`, plano `free-1-1gb`, banco isolado `flowcore_staging`, usuario isolado `flowcore_app`;
+- Valkey: servico `flowcore-valkey`, plano `free-1`, estado `RUNNING`;
+- Credenciais continuam fora do Git.
+
+A politica de banco demo deve continuar resetavel apenas no banco `flowcore_staging`:
 
 ```powershell
 php artisan migrate:fresh --force
@@ -94,11 +100,10 @@ Esse comando so pode rodar em banco aprovado como resetavel.
 
 Nao executar deploy externo enquanto qualquer item abaixo estiver pendente:
 
-- aprovacao por plataforma;
-- Git remoto confirmado;
+- Blueprint Render aplicado;
 - segredos definidos fora do Git;
 - URL publica da API definida;
 - URL publica do Reverb definida;
-- banco demo resetavel aprovado;
+- Netlify criado/configurado com as URLs publicas;
 - smoke externo roteirizado;
 - `npm run fitness`, `npm run guard:migrations` e `npm run check:enforcement` verdes.

@@ -125,12 +125,18 @@ Existe no repositorio:
   - `deploy/render/render.yaml.example` documenta Render sem ativar Blueprint real
   - `deploy/aiven/free-tier-checklist.md` documenta MySQL/Valkey sem criar servicos
   - exemplos de env de staging vivem em `docs/env/`
+- Fase 9 - Platform Approval + External Smoke:
+  - PO aprovou seguir com recursos externos em free tier
+  - Render Blueprint real `render.yaml` foi materializado e validado
+  - Aiven criou `flowcore-valkey` em free tier
+  - Aiven bloqueou segundo MySQL free por limite da organizacao; FlowCore usa banco `flowcore_staging` e usuario `flowcore_app` isolados no servico MySQL existente `portfolio`
+  - Netlify permanece pendente ate existirem URLs publicas de API/Reverb
 
 Ainda nao existe:
 
 - Fluxos completos do produto fora do roadmap faseado.
 - Backlog tecnico.
-- Deploy publico/staging real provisionado.
+- Deploy publico/staging real aplicado no Render/Netlify.
 
 ## Contexto Confirmado
 
@@ -172,12 +178,14 @@ Ainda nao existe:
 - A Fase 8 definiu `/config.json` como contrato runtime do frontend para API e Reverb.
 - A Fase 8 definiu falha fechada fora de localhost quando a config runtime nao puder ser carregada.
 - A Fase 8 definiu que templates Render/Aiven permanecem documentais ate Gate PO especifico.
+- A Fase 9 definiu que o limite gratuito da Aiven impede segundo MySQL; o banco demo FlowCore deve ficar isolado em `flowcore_staging`, sem operar sobre `defaultdb`.
+- A Fase 9 definiu `flowcore-valkey` como Redis-compatible gerenciado para cache, sessoes, filas e Horizon/Reverb no staging.
 
 ## Em Progresso
 
-Fase 8 concluida e auditada na branch `feature/deployment-readiness`.
+Fase 9 em andamento na branch `feature/deployment-readiness`.
 
-Proxima etapa recomendada: Fase 9 - Platform Approval + External Smoke, apenas se o PO aprovar plataforma, conta/workspace e criacao de recursos externos. Alternativa sem recursos externos: backlog tecnico formal de hardening.
+Proxima etapa recomendada: aplicar o Blueprint no Render Dashboard, preencher segredos `sync: false`, capturar URLs publicas de API/Reverb e entao criar/configurar o site Netlify.
 
 ## Bloqueios
 

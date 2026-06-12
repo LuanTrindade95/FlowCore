@@ -1,6 +1,6 @@
 # Staging Plan
 
-Este plano prepara o FlowCore para avaliacao externa sem criar recursos em nuvem nesta fase.
+Este plano registra a estrategia de staging externo do FlowCore.
 
 ## Decisao Da Fase 7
 
@@ -15,7 +15,7 @@ Escopo aprovado pelo PO:
 
 ## Recomendacao Atual
 
-Para a proxima aprovacao operacional, a estrategia mais coerente e:
+Para a execucao operacional, a estrategia mais coerente e:
 
 1. **Local demo como referencia oficial agora**
    - Mantem a stack completa: Angular, Laravel, MySQL, Redis, Horizon e Reverb.
@@ -34,9 +34,10 @@ Para a proxima aprovacao operacional, a estrategia mais coerente e:
    - Deploy real deve ser aprovado separadamente porque exige conta, Git remoto e variaveis sensiveis.
 
 4. **Aiven como candidato para dados gerenciados**
-   - Pode cobrir MySQL e Valkey/Redis-compatible em free tier.
+   - Valkey foi criado em free tier para FlowCore.
+   - MySQL usa banco e usuario isolados no servico free existente, porque a conta ja atingiu o limite de 1 MySQL free.
    - Mantem dados fora da plataforma de app, melhorando separacao operacional.
-   - Para demo gratuita, deve ser usado apenas se o PO aceitar depender de conta externa.
+   - A resetabilidade fica limitada ao banco `flowcore_staging`.
 
 ## Fontes Oficiais Consultadas
 
@@ -57,15 +58,13 @@ Depois da Fase 8, os bloqueios tecnicos iniciais foram reduzidos:
 - `netlify.toml` documenta build estatico da SPA e rewrite para rotas Angular;
 - `/health` existe no backend para health checks;
 - exemplos de env vivem em `docs/env/`;
-- Render e Aiven possuem templates/checklists documentais em `deploy/`.
+- Render possui Blueprint real em `render.yaml`, e Aiven possui recursos separados/isolados para FlowCore.
 
-Ainda nao deve haver deploy externo sem aprovacao especifica porque:
+Ainda nao deve haver smoke externo completo sem aplicar Render e configurar Netlify porque:
 
-- nenhum recurso externo foi criado;
-- nao ha Git remoto confirmado para deploy;
 - URLs reais de API/Reverb ainda nao foram aprovadas;
 - segredos e credenciais precisam ser preenchidos fora do Git;
-- a politica de reset do banco demo precisa ser aprovada por plataforma.
+- Netlify precisa receber as variaveis `FLOWCORE_*` com as URLs publicas.
 
 ## Arquitetura Alvo Futuramente Aprovavel
 
@@ -82,8 +81,8 @@ Render
   Reverb web service
 
 Aiven
-  MySQL free tier
-  Valkey free tier for Redis-compatible cache/queue/session
+  MySQL service portfolio / database flowcore_staging / user flowcore_app
+  Valkey service flowcore-valkey for Redis-compatible cache/queue/session
 ```
 
 ## Variaveis De Ambiente Para Staging
