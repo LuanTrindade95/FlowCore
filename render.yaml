@@ -4,6 +4,7 @@
 # - Frontend static hosting remains on Netlify.
 # - MySQL and Valkey/Redis-compatible services are provided externally by Aiven.
 # - Secrets are filled manually in Render Dashboard.
+# - Free-tier staging does not provision background workers; queued work runs sync.
 
 services:
   - type: web
@@ -59,7 +60,7 @@ services:
       - key: CACHE_STORE
         value: redis
       - key: QUEUE_CONNECTION
-        value: redis
+        value: sync
       - key: BROADCAST_CONNECTION
         value: reverb
       - key: REVERB_APP_ID
@@ -80,30 +81,6 @@ services:
         value: 0.0.0.0
       - key: REVERB_SERVER_PORT
         value: "8080"
-
-  - type: worker
-    name: flowcore-horizon
-    runtime: docker
-    plan: free
-    region: oregon
-    dockerfilePath: ./docker/backend.Dockerfile
-    dockerContext: .
-    dockerCommand: php artisan horizon
-    autoDeploy: false
-    envVars:
-      - fromGroup: flowcore-staging-shared
-
-  - type: worker
-    name: flowcore-scheduler
-    runtime: docker
-    plan: free
-    region: oregon
-    dockerfilePath: ./docker/backend.Dockerfile
-    dockerContext: .
-    dockerCommand: sh -c "while true; do php artisan schedule:run --no-interaction; sleep 60; done"
-    autoDeploy: false
-    envVars:
-      - fromGroup: flowcore-staging-shared
 
   - type: web
     name: flowcore-reverb
@@ -155,7 +132,7 @@ envVarGroups:
       - key: CACHE_STORE
         value: redis
       - key: QUEUE_CONNECTION
-        value: redis
+        value: sync
       - key: BROADCAST_CONNECTION
         value: reverb
       - key: REVERB_APP_ID
