@@ -71,7 +71,7 @@ O template `deploy/render/render.yaml.example` e apenas referencia. Ele modela:
 
 - API Laravel como web service Docker;
 - Horizon como worker;
-- scheduler como cron;
+- scheduler como worker free-tier executando `schedule:run` em loop;
 - Reverb como web service separado;
 - segredos com `sync: false`;
 - `autoDeploy: false`;

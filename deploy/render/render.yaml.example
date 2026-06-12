@@ -84,20 +84,19 @@ services:
     region: oregon
     dockerfilePath: ./docker/backend.Dockerfile
     dockerContext: .
-    startCommand: php artisan horizon
+    dockerCommand: php artisan horizon
     autoDeploy: false
     envVars:
       - fromGroup: flowcore-staging-shared
 
-  - type: cron
+  - type: worker
     name: flowcore-scheduler
     runtime: docker
     plan: free
     region: oregon
-    schedule: "* * * * *"
     dockerfilePath: ./docker/backend.Dockerfile
     dockerContext: .
-    startCommand: php artisan schedule:run --no-interaction
+    dockerCommand: sh -c "while true; do php artisan schedule:run --no-interaction; sleep 60; done"
     autoDeploy: false
     envVars:
       - fromGroup: flowcore-staging-shared
@@ -109,7 +108,7 @@ services:
     region: oregon
     dockerfilePath: ./docker/backend.Dockerfile
     dockerContext: .
-    startCommand: php artisan reverb:start --host=0.0.0.0 --port=${PORT}
+    dockerCommand: php artisan reverb:start --host=0.0.0.0 --port=${PORT}
     autoDeploy: false
     envVars:
       - fromGroup: flowcore-staging-shared

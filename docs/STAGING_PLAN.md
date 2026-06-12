@@ -28,8 +28,9 @@ Para a proxima aprovacao operacional, a estrategia mais coerente e:
    - Exige backend publico configurado antes de virar demo funcional.
 
 3. **Render como candidato para backend full stack**
-   - Melhor encaixe entre as opcoes para API Laravel, workers, cron/scheduler e servicos web.
+   - Melhor encaixe entre as opcoes para API Laravel, workers, scheduler e servicos web.
    - O free tier e bom para prova de conceito, mas tem spin down em web services ociosos.
+   - No free tier, o template validado modela o scheduler como worker; cron dedicado fica como opcao futura paga/aprovada.
    - Deploy real deve ser aprovado separadamente porque exige conta, Git remoto e variaveis sensiveis.
 
 4. **Aiven como candidato para dados gerenciados**
@@ -77,7 +78,7 @@ Netlify
 Render
   Laravel API web service
   Horizon worker
-  Scheduler/cron service
+  Scheduler worker no free tier
   Reverb web service
 
 Aiven
