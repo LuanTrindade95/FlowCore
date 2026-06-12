@@ -49,22 +49,30 @@ Para a proxima aprovacao operacional, a estrategia mais coerente e:
 
 ## Estado Atual Do Codigo Para Deploy Externo
 
-O app ainda nao deve ser publicado externamente sem uma fase tecnica adicional, porque:
+Depois da Fase 8, os bloqueios tecnicos iniciais foram reduzidos:
 
-- `frontend/src/app/core/api/api-base-url.ts` aponta para `http://localhost:8000/api/v1`;
-- `frontend/src/app/core/realtime/realtime.config.ts` aponta para Reverb em `localhost:8080`;
-- o Docker Compose local usa nomes internos (`mysql`, `redis`, `reverb`) que nao existem em nuvem;
-- o backend depende de variaveis de ambiente para `APP_URL`, CORS, banco, Redis, queue e Reverb.
+- o frontend carrega `/config.json` antes do bootstrap;
+- `frontend/scripts/write-runtime-config.mjs` gera config por variaveis `FLOWCORE_*`;
+- `netlify.toml` documenta build estatico da SPA e rewrite para rotas Angular;
+- `/health` existe no backend para health checks;
+- exemplos de env vivem em `docs/env/`;
+- Render e Aiven possuem templates/checklists documentais em `deploy/`.
 
-Esses pontos nao impedem a Fase 7 documentada, mas bloqueiam deploy externo funcional sem uma Fase 8 de `deployment-readiness`.
+Ainda nao deve haver deploy externo sem aprovacao especifica porque:
+
+- nenhum recurso externo foi criado;
+- nao ha Git remoto confirmado para deploy;
+- URLs reais de API/Reverb ainda nao foram aprovadas;
+- segredos e credenciais precisam ser preenchidos fora do Git;
+- a politica de reset do banco demo precisa ser aprovada por plataforma.
 
 ## Arquitetura Alvo Futuramente Aprovavel
 
 ```text
 Netlify
   Angular SPA
-  build: npm --prefix frontend run build
-  publish: frontend/dist/frontend/browser
+  build: npm ci && npm run build:staging
+  publish: dist/frontend/browser
 
 Render
   Laravel API web service
@@ -119,13 +127,18 @@ REVERB_SERVER_PORT=${PORT}
 
 ### Frontend Angular
 
-O frontend precisa de uma decisao tecnica antes do deploy externo:
+O frontend usa `/config.json` carregado em runtime.
 
-- build-time file replacement por ambiente; ou
-- `assets/config.json` carregado em runtime; ou
-- endpoint relativo por proxy/rewrite.
+```text
+FLOWCORE_API_BASE_URL=https://<backend-url>/api/v1
+FLOWCORE_REALTIME_APP_KEY=<public-reverb-key>
+FLOWCORE_REALTIME_AUTH_ENDPOINT=https://<backend-url>/api/broadcasting/auth
+FLOWCORE_REALTIME_WS_HOST=<public-reverb-host>
+FLOWCORE_REALTIME_WS_PORT=443
+FLOWCORE_REALTIME_FORCE_TLS=true
+```
 
-Recomendacao: usar `assets/config.json` em fase futura, porque permite promover o mesmo build entre ambientes.
+Detalhes: `docs/DEPLOYMENT_READINESS.md`.
 
 ## Runbook Local De Staging
 
@@ -173,12 +186,12 @@ Nao executar deploy externo enquanto qualquer item abaixo estiver pendente:
 
 ## Proxima Fase Recomendada
 
-`Fase 8 - Deployment Readiness`
+`Fase 9 - Platform Approval + External Smoke`, caso o PO aprove uma plataforma especifica.
 
 Escopo:
 
-- parametrizar API/Reverb no frontend;
-- criar exemplos `netlify.toml` e/ou `render.yaml` sem secrets;
-- validar build com variaveis de staging;
-- preparar checklist de criacao manual em Netlify/Render/Aiven;
-- manter qualquer criacao externa bloqueada por Gate PO.
+- aprovar plataforma e workspace;
+- criar recursos externos manualmente ou via IaC aprovado;
+- configurar secrets fora do Git;
+- rodar migrations/seed no banco demo resetavel;
+- executar smoke externo completo.

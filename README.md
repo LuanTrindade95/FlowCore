@@ -29,6 +29,8 @@ FlowCore separa a definicao do processo da execucao:
 - Realtime com Reverb/Echo em canais privados por usuario.
 - Dashboard operacional, inbox, lista e detalhe de requests.
 - Seed demo idempotente para avaliacao local.
+- Runtime config externo via `/config.json`, com fallback local e falha fechada fora de localhost.
+- Health endpoint `/health` para checks de plataforma.
 
 ## Stack
 
@@ -159,6 +161,8 @@ Evidencias visuais: [docs/assets/screenshots/README.md](docs/assets/screenshots/
 
 Plano de staging documentado: [docs/STAGING_PLAN.md](docs/STAGING_PLAN.md).
 
+Deployment readiness: [docs/DEPLOYMENT_READINESS.md](docs/DEPLOYMENT_READINESS.md).
+
 ## Checks
 
 Gates agregados do monorepo:
@@ -215,6 +219,7 @@ Fase 6 adiciona:
 - Seed demo idempotente testado em SQLite e MySQL.
 - README e arquitetura preparados para avaliacao de portfolio.
 - Fase 7 documenta staging sem criar recursos externos e adiciona screenshots versionados.
+- Fase 8 prepara runtime config, `netlify.toml`, exemplos Render/Aiven, env examples e health check sem provisionar recursos externos.
 
 ## Estrutura
 
@@ -222,6 +227,7 @@ Fase 6 adiciona:
 backend/   API Laravel, dominio, scheduler, realtime e testes Pest
 frontend/  SPA Angular, builder, runtime, UI kit e testes Jest
 docker/    Dockerfiles e configuracoes de runtime
+deploy/    templates e checklists de deploy sem segredos
 docs/      visao, arquitetura, ADRs e progresso por fase
 brain/     contexto operacional para agentes IA
 ```

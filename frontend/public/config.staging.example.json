@@ -1,0 +1,10 @@
+{
+  "apiBaseUrl": "https://flowcore-api.example.com/api/v1",
+  "realtime": {
+    "appKey": "replace-with-public-reverb-key",
+    "authEndpoint": "https://flowcore-api.example.com/api/broadcasting/auth",
+    "wsHost": "flowcore-reverb.example.com",
+    "wsPort": 443,
+    "forceTls": true
+  }
+}

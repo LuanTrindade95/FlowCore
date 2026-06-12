@@ -432,3 +432,28 @@ Executar a Fase 7 como staging documentado:
 - O portfolio ganha runbook e evidencias sem risco de custo ou exposicao.
 - O deploy externo fica tecnicamente honesto: Netlify pode hospedar a SPA, mas precisa de backend publico; Render/Aiven entram como candidatos para servicos long-running e dados.
 - A proxima fase deve parametrizar API/Reverb no frontend antes de qualquer publicacao funcional.
+
+## ADR-25 - Runtime config externo para frontend
+
+### Contexto
+
+A Fase 7 identificou que o frontend apontava diretamente para `localhost` em API e Reverb. Isso bloqueava qualquer staging externo funcional e tornava a mesma build dependente do ambiente onde foi compilada.
+
+### Decisao
+
+Carregar `/config.json` antes do bootstrap Angular e prover `FLOWCORE_API_BASE_URL` e `FLOWCORE_REALTIME_CONFIG` por tokens Angular. Em localhost, ausencia do arquivo usa defaults locais. Fora de localhost, ausencia ou erro de carga falha fechado para evitar chamadas acidentais para `localhost`.
+
+Adicionar tambem:
+
+- `frontend/scripts/write-runtime-config.mjs` para gerar `public/config.json` via variaveis `FLOWCORE_*`;
+- `frontend/public/config.staging.example.json` como exemplo sem segredos;
+- `netlify.toml` para build estatico da SPA;
+- `/health` no backend para checks de plataforma;
+- templates documentais para Render e Aiven sem provisionamento externo.
+
+### Consequencias
+
+- A SPA pode ser promovida entre ambientes substituindo apenas `config.json`.
+- Netlify pode gerar o arquivo no build usando variaveis de ambiente nao secretas.
+- O deploy real continua bloqueado por Gate PO, porque `deploy/render/render.yaml.example` e Aiven checklist sao apenas referencia.
+- Falhas de configuracao externa ficam visiveis no bootstrap em vez de degradarem silenciosamente para URLs locais.

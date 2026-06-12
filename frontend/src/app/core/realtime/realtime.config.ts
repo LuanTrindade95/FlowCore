@@ -4,6 +4,10 @@ import Pusher from 'pusher-js';
 
 import { FLOWCORE_API_BASE_URL } from '../api/api-base-url';
 
+export const DEFAULT_FLOWCORE_REALTIME_APP_KEY = 'flowcore-local-key';
+export const DEFAULT_FLOWCORE_REALTIME_HOST = 'localhost';
+export const DEFAULT_FLOWCORE_REALTIME_PORT = 8080;
+
 export interface RealtimeConfig {
   appKey: string;
   authEndpoint: string;
@@ -17,10 +21,10 @@ export const FLOWCORE_REALTIME_CONFIG = new InjectionToken<RealtimeConfig>('FLOW
     const apiBaseUrl = inject(FLOWCORE_API_BASE_URL);
 
     return {
-      appKey: 'flowcore-local-key',
+      appKey: DEFAULT_FLOWCORE_REALTIME_APP_KEY,
       authEndpoint: apiBaseUrl.replace('/api/v1', '/api/broadcasting/auth'),
-      wsHost: 'localhost',
-      wsPort: 8080,
+      wsHost: DEFAULT_FLOWCORE_REALTIME_HOST,
+      wsPort: DEFAULT_FLOWCORE_REALTIME_PORT,
       forceTls: false,
     };
   },

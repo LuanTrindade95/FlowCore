@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:staging": "node scripts/write-runtime-config.mjs && ng build",
+    "config:runtime": "node scripts/write-runtime-config.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
     "test:watch": "jest --watch",

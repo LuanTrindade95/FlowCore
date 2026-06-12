@@ -104,6 +104,8 @@ O endpoint `/api/broadcasting/auth` autentica o canal privado com Sanctum Bearer
 
 O backend usa `REVERB_BROADCAST_HOST` para publicar dentro do Docker (`reverb`), enquanto o navegador usa `localhost:8080`.
 
+No frontend, API e Reverb sao configurados por `/config.json` carregado antes do bootstrap Angular. Em localhost ha fallback local; fora de localhost, falha de config bloqueia o bootstrap para evitar chamadas acidentais para endpoints locais.
+
 ## Scheduler E SLA
 
 `routes/console.php` agenda:
@@ -165,4 +167,5 @@ Isso permite restaurar uma vitrine local sem duplicar dados.
 - Token frontend fica apenas em memoria; refresh da SPA exige novo login.
 - Realtime faz refresh por tela em vez de aplicar patches client-side, reduzindo risco de estado divergente.
 - Seed demo reseta apenas dados marcados como seedados; dados manuais podem coexistir.
-- Screenshots nao sao versionados por padrao para evitar binarios ate haver fluxo final de portfolio.
+- Apenas screenshots selecionados sao versionados para evidencia de portfolio; capturas exploratorias continuam fora do Git.
+- Templates de Render/Aiven sao documentais e nao devem ser aplicados sem Gate PO.
