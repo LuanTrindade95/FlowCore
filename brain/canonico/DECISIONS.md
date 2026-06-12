@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-11
+updated: 2026-06-12
 owner: LuanTrindade95
 status: canonico
 ---
@@ -217,3 +217,27 @@ Por que: o FlowCore precisa de um dataset de vitrine reproduzivel para E2E, READ
 Decisao: a seed demo identifica exemplos runtime por `workflow_actions.payload.seeded=true`; instancias sem esse marcador nao sao removidas.
 
 Por que: avaliadores podem criar solicitacoes durante a demo, e uma nova seed nao deve apagar dados manuais sem um reset explicito do banco.
+
+## 2026-06-12 - Staging documentado antes de provisionamento externo
+
+Decisao: a Fase 7 entrega staging documentado/local, evidencias visuais e roteiro E2E, sem criar recursos externos.
+
+Por que: o PO aprovou evitar qualquer provisionamento em Netlify, Render, Aiven ou plataforma equivalente ate haver aprovacao especifica por plataforma.
+
+## 2026-06-12 - Plataformas candidatas para staging futuro
+
+Decisao: considerar Netlify para frontend Angular estatico, Render para backend/servicos e Aiven para MySQL/Valkey quando o deploy real for aprovado.
+
+Por que: essas plataformas cobrem o desenho full stack desejado e permitem planejamento de free tier/local sem comprometer custo agora.
+
+## 2026-06-12 - Demo DB resetavel como requisito de staging
+
+Decisao: qualquer staging futuro deve manter dados demo resetaveis e reproduziveis.
+
+Por que: o portfolio precisa de uma vitrine previsivel para avaliadores, screenshots, smoke externo e entrevistas tecnicas.
+
+## 2026-06-12 - Evidencias visuais seletivas
+
+Decisao: versionar poucas imagens selecionadas em `docs/assets/screenshots/`, focadas nos fluxos de maior valor.
+
+Por que: screenshots devem sustentar avaliacao rapida do portfolio sem inflar o repositorio com capturas redundantes.

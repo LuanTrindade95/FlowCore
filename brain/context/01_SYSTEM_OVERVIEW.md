@@ -10,7 +10,7 @@ Empresas que precisam automatizar aprovacoes e processos internos com regras con
 
 ## Estado Atual
 
-Projeto full stack implementado localmente e validado ate a Fase 6 do build-loop. O produto ja possui backend Laravel, frontend Angular, banco MySQL, Redis, Horizon, Reverb, Workflow Engine configuravel, builder visual, runtime operacional, automacoes de SLA, realtime privado e dataset demo idempotente.
+Projeto full stack implementado localmente e validado ate a Fase 7 do build-loop. O produto ja possui backend Laravel, frontend Angular, banco MySQL, Redis, Horizon, Reverb, Workflow Engine configuravel, builder visual, runtime operacional, automacoes de SLA, realtime privado, dataset demo idempotente, staging documentado e evidencias visuais versionadas.
 
 ## Stack Decidida
 
@@ -33,6 +33,9 @@ O FlowCore sera uma Workflow Engine dinamica. Administradores poderao configurar
 - Frontend Angular com login, shell autenticado, guards, UI kit, builder visual Foblex, form builder, runtime de solicitacoes, inbox e dashboard.
 - Escalonamento de SLA por scheduler e refresh realtime em canais privados por usuario.
 - Seed demo reproduzivel com 10 usuarios, 2 workflows publicados e 10 instancias variadas.
+- Staging documentado em `docs/STAGING_PLAN.md`, sem provisionamento externo.
+- Roteiro de demo E2E local em `docs/DEMO_E2E_SCRIPT.md`.
+- Screenshots de portfolio em `docs/assets/screenshots/`.
 
 ## Capacidades Que O Projeto Deve Demonstrar
 

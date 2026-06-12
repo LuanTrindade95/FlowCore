@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-11
+updated: 2026-06-12
 owner: LuanTrindade95
 status: canonico
 ---
@@ -12,7 +12,7 @@ FlowCore e uma plataforma de automacao de processos empresariais configuraveis. 
 
 ## Estado Atual
 
-O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime, automacoes realtime de SLA e polish de vitrine implementados e validados localmente.
+O projeto esta com a fundacao tecnica, a modelagem de dominio/dados, autenticacao/RBAC, API de definicoes, engine backend de workflow, fundacao frontend autenticada, builder visual/form builder, experiencia runtime, automacoes realtime de SLA, polish de vitrine e staging documentado implementados e validados localmente.
 
 Existe no repositorio:
 
@@ -25,6 +25,9 @@ Existe no repositorio:
   - `docs/DECISIONS.md`
   - `docs/PROGRESS.md`
   - `docs/ARCHITECTURE.md`
+  - `docs/STAGING_PLAN.md`
+  - `docs/DEMO_E2E_SCRIPT.md`
+  - evidencias visuais versionadas em `docs/assets/screenshots/`
 - Backend Laravel 12 em `backend/`.
 - Frontend Angular 19 standalone em `frontend/`.
 - Infra local com Docker Compose, MySQL 8, Redis 7, Horizon, Reverb e frontend.
@@ -102,13 +105,19 @@ Existe no repositorio:
   - teste `DemoSeederTest` garantindo estabilidade do dataset demo em execucoes repetidas
   - tela de login alinhada ao posicionamento de demo tecnica
   - E2E local validou login, dashboard, workflows publicados e login mobile sem overflow
+- Fase 7 - Staging Documentado + Evidencias:
+  - branch `feature/deploy-staging-evidence` criada a partir de `feature/root-gates`
+  - `docs/STAGING_PLAN.md` documenta Netlify, Render e Aiven como candidatos sem provisionamento externo
+  - `docs/DEMO_E2E_SCRIPT.md` formaliza o roteiro local resetavel para avaliacao tecnica
+  - screenshots desktop versionados para login, dashboard e workflows publicados
+  - README, decisoes e progresso atualizados com o status de staging documentado
+  - validacao completa executada com root gates, seed Docker, Playwright e godmode verify
 
 Ainda nao existe:
 
 - Fluxos completos do produto fora do roadmap faseado.
 - Backlog tecnico.
-- Deploy publico/staging versionado.
-- Screenshots versionados no repositorio.
+- Deploy publico/staging real provisionado.
 
 ## Contexto Confirmado
 
@@ -144,12 +153,15 @@ Ainda nao existe:
 - A Fase 5 definiu escalonamento de SLA idempotente por comando agendado com lock pessimista.
 - A Fase 6 definiu seed demo deterministica como base de vitrine reproduzivel.
 - A Fase 6 definiu que apenas instancias com marcador `payload.seeded=true` em `workflow_actions` podem ser removidas/recriadas pela seed demo.
+- A Fase 7 definiu que o staging oficial neste momento e documentado/local, sem criar recursos externos ate aprovacao especifica por plataforma.
+- A Fase 7 definiu que Netlify, Render e Aiven sao candidatos de deploy futuro, com preferencia por free tier/local e banco demo resetavel.
+- A Fase 7 definiu que poucas imagens selecionadas devem ser versionadas como evidencia de portfolio, nao um acervo completo de screenshots.
 
 ## Em Progresso
 
-Fase 6 concluida e auditada na branch `feature/portfolio-polish`.
+Fase 7 concluida e auditada na branch `feature/deploy-staging-evidence`.
 
-Proxima etapa depende de decisao do PO: abrir fase de deploy/staging, criar backlog tecnico formal, versionar evidencias visuais ou iniciar hardening de producao.
+Proxima etapa recomendada: Fase 8 - Deployment Readiness, parametrizando frontend API/Reverb, documentando variaveis por ambiente e preparando arquivos de configuracao sem criar recursos externos.
 
 ## Bloqueios
 
