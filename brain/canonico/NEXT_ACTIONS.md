@@ -8,23 +8,31 @@ status: canonico
 
 ## Ordem Recomendada
 
-1. Escolher a proxima frente:
-   - Fase 9 - Platform Approval + External Smoke, se o PO aprovar plataforma e criacao de recursos externos;
-   - Backlog tecnico formal de hardening, se o PO quiser continuar sem recursos externos.
-2. Antes de qualquer deploy externo, confirmar plataforma, workspace, Git remoto, URLs, secrets e politica de banco demo resetavel.
-3. Nao renomear `deploy/render/render.yaml.example` para `render.yaml` sem aprovacao explicita.
-4. Manter os contratos runtime da Fase 4C como autoridade para visibilidade e acoes.
-5. Manter seed demo idempotente como base obrigatoria de qualquer E2E local ou staging.
-6. Manter uma branch por fase e commits granulares.
+1. Aplicar o Blueprint Render publicado em `main`:
+   - repo: `https://github.com/LuanTrindade95/FlowCore`;
+   - arquivo: `render.yaml`;
+   - Dashboard: `https://dashboard.render.com/blueprint/new?repo=https://github.com/LuanTrindade95/FlowCore`.
+2. Preencher no Render os segredos `sync: false` fora do Git:
+   - `APP_KEY`;
+   - credenciais Aiven MySQL do usuario `flowcore_app`;
+   - credenciais Aiven Valkey do usuario `default`;
+   - `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET`;
+   - `APP_URL`, `FRONTEND_URL`, `FRONTEND_URLS`, `REVERB_HOST`, `REVERB_BROADCAST_HOST`.
+3. Depois que `flowcore-api` e `flowcore-reverb` estiverem `live`, criar/configurar Netlify com as variaveis `FLOWCORE_*`.
+4. Rodar migracoes/seed apenas no banco Aiven `flowcore_staging`; nunca rodar reset em `defaultdb`.
+5. Executar smoke externo: `/health`, login, dashboard, runtime inbox/detalhe e realtime basico.
+6. Manter seed demo idempotente como base obrigatoria de qualquer E2E local ou staging.
 7. Atualizar `docs/DECISIONS.md`, `docs/PROGRESS.md` e o Brain no fechamento de cada fase.
 
-## Primeira Sessao Recomendada
+## Estado Atual
 
-Fase 8 ja foi implementada na branch `feature/deployment-readiness`.
+Fase 9 esta em andamento na branch `feature/deployment-readiness` e tambem foi promovida para `main`.
 
 Evidencias registradas:
 
 - Commit funcional: `466f0f7 feat(deploy): prepare staging runtime configuration`
+- Blueprint Render: `14cdb59 feat(deploy): add staging blueprint`
+- Ajuste validado do Blueprint free-tier: `beb74e8 fix(deploy): validate render free-tier blueprint`
 - Root gate `npm run fitness` verde
 - `npm run guard:migrations` verde
 - `npm run check:enforcement` verde
