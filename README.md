@@ -155,7 +155,25 @@ Todas usam a senha `password`.
 
 ## Checks
 
-Backend:
+Gates agregados do monorepo:
+
+```powershell
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run audit
+npm run fitness
+```
+
+Gates auxiliares:
+
+```powershell
+npm run guard:migrations
+npm run check:enforcement
+```
+
+Backend isolado:
 
 ```powershell
 docker compose exec backend ./vendor/bin/pint --test
@@ -163,7 +181,7 @@ docker compose exec backend ./vendor/bin/pest
 docker compose exec backend composer audit
 ```
 
-Frontend:
+Frontend isolado:
 
 ```powershell
 cd frontend
@@ -176,13 +194,14 @@ npm audit --omit=dev
 
 ## Evidencias Recentes
 
-Fase 5 validada em `feature/realtime-automation`:
+Fase 6 validada em `feature/portfolio-polish` e tooling raiz validado em `feature/root-gates`:
 
 - Pint passou.
-- Pest: 38 testes, 144 assertions.
+- Pest: 39 testes, 147 assertions.
 - Frontend: typecheck, lint, 25 testes Jest e build passaram.
 - `npm audit --omit=dev`: 0 vulnerabilidades.
 - `composer audit`: sem advisories.
+- `godmode verify`: passou com os gates raiz e shim TypeScript do monorepo.
 - E2E local: request `#77` mudou de `Pendente` para `Escalada` no Inbox sem reload manual.
 
 Fase 6 adiciona:

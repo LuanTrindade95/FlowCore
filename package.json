@@ -1,0 +1,26 @@
+{
+  "name": "flowcore",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Root orchestration scripts for the FlowCore monorepo.",
+  "bin": {
+    "tsc": "tools/godmode-tsc.cjs"
+  },
+  "scripts": {
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:backend": "docker compose exec -T backend ./vendor/bin/pint --test",
+    "typecheck": "npm --prefix frontend run typecheck",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "docker compose exec -T backend ./vendor/bin/pest",
+    "test:frontend": "npm --prefix frontend test -- --runInBand",
+    "build": "npm --prefix frontend run build",
+    "audit": "npm --prefix frontend audit --omit=dev && docker compose exec -T backend composer audit",
+    "fitness": "npm run lint && npm run typecheck && npm test && npm run build && npm run audit",
+    "guard:migrations": "docker compose exec -T backend php artisan migrate:status --no-interaction",
+    "check:enforcement": "npm run guard:migrations"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.2"
+  }
+}
