@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-12
+updated: 2026-09-18
 owner: LuanTrindade95
 status: canonico
 ---
@@ -21,7 +21,9 @@ Nenhum bug funcional aberto registrado nas fases concluidas ate a Fase 8.
 - A tabela `instance_steps` possui apenas `assigned_to`; para steps por role/multiplos aprovadores, a Fase 3C deixa `assigned_to=null` e resolve os aprovadores dinamicamente a partir de `step_approvers` no momento da decisao.
 - `ng build` com Tailwind CSS v4 ainda pode emitir um aviso de otimizacao CSS sobre uma regra base aninhada do preflight (`& -> Empty sub-selector`). O build termina com exit code 0 e o smoke Playwright confirmou CSS aplicado no Chromium.
 - O ambiente de E2E local depende de usuarios demo, RBAC e workflows publicados. A seed idempotente cobre o estado demo local, mas staging publico ainda precisa de estrategia propria de dados.
-- O endpoint realtime usa explicitamente a conexao `reverb`; ambientes que alterarem o nome da conexao de broadcasting devem atualizar `BroadcastAuthController`.
+- O endpoint realtime usa explicitamente a conexao `reverb`; ambientes que alterarem o nome da conexao de broadcasting devem atualizar `BroadcastAuthController`. O controller registra o canal `users.{id}.runtime` nessa conexao no momento da request; resolver `Broadcast::connection('reverb')` durante o boot quebra `artisan`/`composer install` sem `REVERB_APP_KEY`.
+- O Pest emite um warning por teste (`file_get_contents(backend/.env)`) quando `backend/.env` nao existe, como no CI; nao falha a suite.
+- O CI exibe annotations de deprecacao: actions em runtime Node 20 (`actions/checkout@v4`, cache) e migracao de `ubuntu-latest` para Ubuntu 26 a partir de 2026-10-19.
 - Em Docker local, `backend/.env` ignorado precisa estar alinhado ao `.env.example` para `BROADCAST_CONNECTION`, `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET` e `REVERB_BROADCAST_HOST`; caso contrario, o servidor `artisan serve` pode divergir dos processos CLI.
 - O deploy externo ainda depende de plataforma, workspace, Git remoto, secrets e URLs reais aprovados pelo PO.
 - `deploy/render/render.yaml.example` nao foi validado por Render CLI nem aplicado em Blueprint, por decisao de nao criar/provisionar recursos externos.

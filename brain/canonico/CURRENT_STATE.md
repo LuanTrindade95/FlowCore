@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-12
+updated: 2026-09-18
 owner: LuanTrindade95
 status: canonico
 ---
@@ -33,7 +33,7 @@ Existe no repositorio:
 - Backend Laravel 12 em `backend/`.
 - Frontend Angular 19 standalone em `frontend/`.
 - Infra local com Docker Compose, MySQL 8, Redis 7, Horizon, Reverb e frontend.
-- CI inicial em `.github/workflows/ci.yml`.
+- CI em `.github/workflows/ci.yml` verde no `main` desde `f78be75` (2026-09-18): jobs backend (pint + pest) e frontend (lint, test, typecheck, build).
 - Dominio Laravel da Fase 2:
   - tabelas Definition: `workflow_definitions`, `workflow_steps`, `step_approvers`, `workflow_transitions`, `form_fields`
   - tabelas Runtime: `workflow_instances`, `instance_steps`, `instance_step_decisions`, `workflow_actions`
