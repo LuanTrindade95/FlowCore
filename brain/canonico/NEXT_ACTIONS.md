@@ -26,7 +26,7 @@ status: canonico
 
 ## Estado Atual
 
-Fase 9 esta em andamento na branch `feature/deployment-readiness` e tambem foi promovida para `main`.
+Fase 9 esta em andamento e foi promovida para `main`.
 
 Evidencias registradas:
 

@@ -184,7 +184,7 @@ Ainda nao existe:
 
 ## Em Progresso
 
-Fase 9 em andamento na branch `feature/deployment-readiness`.
+Fase 9 em andamento em `main`.
 
 Proxima etapa recomendada: aplicar o Blueprint no Render Dashboard, preencher segredos `sync: false`, capturar URLs publicas de API/Reverb e entao criar/configurar o site Netlify.
 
