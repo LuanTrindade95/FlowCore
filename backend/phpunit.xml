@@ -27,6 +27,9 @@
         <env name="MAIL_MAILER" value="array"/>
         <env name="PULSE_ENABLED" value="false"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="REVERB_APP_ID" value="flowcore-test"/>
+        <env name="REVERB_APP_KEY" value="flowcore-test-key"/>
+        <env name="REVERB_APP_SECRET" value="flowcore-test-secret"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
     </php>
