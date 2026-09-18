@@ -20,6 +20,7 @@ Existe no repositorio:
 - `LICENSE` MIT.
 - `.gitattributes`.
 - Dev Brain inicial em `brain/`.
+- Fluxo de tres agentes para Claude Code: `CLAUDE.md` na raiz define a sessao principal como Interlocutor (leitura do brain, observacao de contexto, encerramento); subagentes `.claude/agents/executor.md` (aplica correcao com evidencia por passo) e `.claude/agents/auditor.md` (auditoria adversarial somente leitura, veredito APROVADO/REPROVADO).
 - Documentos formais iniciais em `docs/`:
   - `docs/VISION.md`
   - `docs/DECISIONS.md`
