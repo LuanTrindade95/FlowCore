@@ -24,16 +24,18 @@ A hierarquia de confiança e o checklist de encerramento estão em `brain/CLAUDE
 8. ADRs relevantes em `brain/decisions/` e o handoff mais recente em `brain/handoffs/`
 9. `brain/architecture/` e `brain/product/` conforme a tarefa
 
-`brain/canonico/` vence qualquer conflito. `docs/` (`PROGRESS.md`, `DECISIONS.md`, `VISION.md`, `ARCHITECTURE.md`) é documentação pública do projeto, não fonte canônica.
+`brain/canonico/` vence qualquer conflito. `docs/` (`PROGRESS.md`, `DECISIONS.md`, `VISION.md`, `ARCHITECTURE.md`) é documentação pública do projeto, não fonte canônica. Se o brain divergir do código, investigue e corrija o brain no encerramento.
 
 ### Ciclo de uma tarefa
+
+O prompt de correção e o prompt de auditoria pertencem ao mesmo item, mas **não entram ao mesmo tempo**. O humano entrega ao Interlocutor apenas o prompt de correção; o prompt de auditoria fica retido com o humano até o Executor devolver o pacote de resultado. O Auditor precisa chegar sem ter visto o gabarito: nunca receba nem repasse os dois prompts na mesma etapa.
 
 1. **Observação de contexto.** Antes de acionar o Executor, o Interlocutor produz:
    - até 10 linhas de estado real (lido do brain e confirmado no código);
    - as leis e os ADRs que a correção precisa respeitar;
    - o que não pode ser tocado.
 2. **Executor.** Acionado com o prompt de correção + a observação de contexto.
-3. **Auditor.** Acionado com o pacote de resultado do Executor + a observação de contexto + o prompt de auditoria, **sem o caminho da correção** (nenhum diff comentado, nenhuma narrativa de como foi feito).
+3. **Auditor.** Só depois da entrega do Executor, o humano libera o prompt de auditoria. O Auditor é acionado com o pacote de resultado do Executor + a observação de contexto + o prompt de auditoria, **sem o caminho da correção** (nenhum diff comentado, nenhuma narrativa de como foi feito).
 4. **Reprovação.** O veredito REPROVADO volta ao Executor pela mão do Interlocutor, com o item que falhou, sem prompt novo. O ciclo repete até APROVADO.
 5. **Encerramento.** Nenhuma tarefa fecha sem o checklist de `brain/CLAUDE.md`: atualizar `brain/canonico/CURRENT_STATE.md`, `NEXT_ACTIONS.md` quando a ordem mudar, registrar decisão em `brain/canonico/DECISIONS.md` e ADR em `brain/decisions/` quando couber, atualizar `brain/canonico/KNOWN_ISSUES.md` e processar `brain/PENDING_UPDATES.md`.
 
