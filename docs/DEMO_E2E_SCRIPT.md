@@ -124,7 +124,8 @@ Passos:
      -d '{"workflow_definition_id": <id-de-aprovacao-de-compra>, "data": {"amount": 1500, "supplier": "Fornecedor Demo", "cost_center": "Tecnologia"}}'
    ```
 
-   - Esperado: `200` (o endpoint retorna o recurso da instancia sem forcar `201`) com a instancia criada e o primeiro step (`manager_approval`) pendente.
+   - Esperado: `201` (o Laravel atribui automaticamente o status `201` a um `JsonResource` retornado por uma rota `POST`) com a instancia criada e o primeiro step (`manager_approval`) pendente.
+   - **Bloqueio conhecido (verificado em staging em 2026-09-19):** para o workflow `Aprovacao de Compra` (`workflow_definition_id: 1`), cujo primeiro step usa `assignee_type: dynamic` / `assignee_ref: requester_manager`, esta chamada retorna `500` de forma reproduzivel (2/2 tentativas), sem criar a `WorkflowInstance` (nenhum novo registro aparece em `GET /api/v1/requests` apos a falha). O mesmo endpoint funciona (`201`) para o workflow `Pedido de Ferias` (`workflow_definition_id: 2`), cujo primeiro step usa `assignee_type: role`. A causa provavel esta isolada em `AssigneeResolver::resolveDynamic()` (`backend/app/Domain/Workflow/Services/AssigneeResolver.php`), mas nao pode ser confirmada sem acesso aos logs da aplicacao (ver `render.yaml`, `LOG_CHANNEL`/`LOG_LEVEL`).
 
 5. Login como `approver@demo.com` (senha `password`) e conferir `GET /api/v1/inbox`.
    - Esperado: `200` com a pendencia da solicitacao criada no passo 4 na lista (o aprovador dinamico do primeiro step e resolvido automaticamente para um usuario com role `approver`).
