@@ -1,5 +1,5 @@
 ---
-updated: 2026-06-12
+updated: 2026-09-19
 owner: LuanTrindade95
 status: canonico
 ---
@@ -265,3 +265,9 @@ Por que: Netlify config nao provisiona recurso por si so; Render Blueprint e Aiv
 Decisao: adicionar `/health` com resposta JSON simples para checks de plataforma.
 
 Por que: Render e outras plataformas precisam de liveness HTTP sem autenticar, sem tocar banco e sem acoplar health check ao dominio runtime.
+
+## 2026-09-19 - Aceite das advisories do Angular 19 no staging
+
+Decisao: aceitar as 7 advisories de `@angular/*` 19.2.25 para a demo de staging; `npm run fitness` fica vermelho no passo `audit` enquanto elas existirem, sem bloquear a Fase 9. O upgrade major do Angular e tarefa propria.
+
+Por que: nao existe correcao dentro da linha 19, a superficie e demo de portfolio sem dado real de usuario e sem SSR, e puxar migracao de framework para dentro do smoke externo trocaria um risco conhecido por um risco maior. Detalhes em `brain/decisions/ADR-020-angular-19-advisory-acceptance.md`.
