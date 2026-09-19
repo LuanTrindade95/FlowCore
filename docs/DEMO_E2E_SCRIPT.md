@@ -112,10 +112,10 @@ Passos:
 
    - Esperado: `200` com `access_token`.
 
-4. Buscar o catalogo de workflows publicados e criar uma solicitacao de compra com valor acima de `1000`:
+4. Buscar o schema do workflow `Aprovacao de Compra` publicado e criar uma solicitacao de compra com valor acima de `1000`:
 
    ```bash
-   curl -s https://flowcore-api-urkx.onrender.com/api/v1/runtime/workflows \
+   curl -s https://flowcore-api-urkx.onrender.com/api/v1/runtime/workflows/<id-de-aprovacao-de-compra> \
      -H "Authorization: Bearer <token-do-requester>" -H "Accept: application/json"
 
    curl -s -X POST https://flowcore-api-urkx.onrender.com/api/v1/requests \
@@ -124,8 +124,8 @@ Passos:
      -d '{"workflow_definition_id": <id-de-aprovacao-de-compra>, "data": {"amount": 1500, "supplier": "Fornecedor Demo", "cost_center": "Tecnologia"}}'
    ```
 
-   - Esperado: `201` (o Laravel atribui automaticamente o status `201` a um `JsonResource` retornado por uma rota `POST`) com a instancia criada e o primeiro step (`manager_approval`) pendente.
-   - **Bloqueio conhecido (verificado em staging em 2026-09-19):** para o workflow `Aprovacao de Compra` (`workflow_definition_id: 1`), cujo primeiro step usa `assignee_type: dynamic` / `assignee_ref: requester_manager`, esta chamada retorna `500` de forma reproduzivel (2/2 tentativas), sem criar a `WorkflowInstance` (nenhum novo registro aparece em `GET /api/v1/requests` apos a falha). O mesmo endpoint funciona (`201`) para o workflow `Pedido de Ferias` (`workflow_definition_id: 2`), cujo primeiro step usa `assignee_type: role`. A causa provavel esta isolada em `AssigneeResolver::resolveDynamic()` (`backend/app/Domain/Workflow/Services/AssigneeResolver.php`), mas nao pode ser confirmada sem acesso aos logs da aplicacao (ver `render.yaml`, `LOG_CHANNEL`/`LOG_LEVEL`).
+   - O schema do formulario publicado (`GET /api/v1/runtime/workflows/<id>`) define exatamente os campos `amount` (number), `supplier` (text) e `cost_center` (select: `Tecnologia`, `Operacoes` ou `Financeiro`), todos obrigatorios. Enviar qualquer campo fora dessa lista retorna `422` com `{"errors":{"data":["O formulario contem campos que nao pertencem a definicao publicada."]}}`.
+   - Esperado com o payload correto: `201` (o Laravel atribui automaticamente o status `201` a um `JsonResource` retornado por uma rota `POST`) com a instancia criada, `status: running` e o primeiro step (`manager_approval`, `assignee_type: dynamic` / `assignee_ref: requester_manager`) pendente e resolvido para o aprovador demo.
 
 5. Login como `approver@demo.com` (senha `password`) e conferir `GET /api/v1/inbox`.
    - Esperado: `200` com a pendencia da solicitacao criada no passo 4 na lista (o aprovador dinamico do primeiro step e resolvido automaticamente para um usuario com role `approver`).
