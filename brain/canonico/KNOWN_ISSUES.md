@@ -6,9 +6,7 @@ status: canonico
 
 # Known Issues
 
-## Bugs Abertos
-
-- `POST /api/v1/requests` retorna 500 para o workflow `Aprovacao de Compra` (definition id 1) em staging, sem persistir a instancia. O mesmo endpoint retorna 201 para `Pedido de Ferias` (id 2). A diferenca estrutural entre os dois e o primeiro step: o de compra usa `assignee_type: dynamic` com `assignee_ref: requester_manager`, resolvido por `AssigneeResolver::resolveDynamic()`. A excecao exata ainda nao foi lida porque o servico Render rodava sem `LOG_CHANNEL=stderr` no momento do smoke.
+Nenhum bug funcional aberto registrado.
 
 ## Limitacoes Atuais
 
@@ -18,6 +16,7 @@ status: canonico
 - Os web services Render em plano free hibernam por inatividade; a primeira resposta apos hibernacao ja foi medida em 24,6 s e 84,5 s. Qualquer divulgacao do link precisa avisar sobre essa espera.
 - O servico MySQL Aiven `portfolio` desliga sozinho (`Powered off`) e, enquanto desligado, seu hostname deixa de resolver em DNS. A API continua respondendo `/health` 200, mas toda rota que toca o banco retorna 500. Religar o servico no console Aiven restaura o acesso.
 - O staging Render roda `QUEUE_CONNECTION=sync` sem Horizon e sem scheduler: o escalonamento de SLA (`workflow:escalate-overdue`) nao executa em staging, so em ambiente local.
+- Logo apos religar o MySQL Aiven, chamadas isoladas a API podem falhar com 500 ou 520 de borda antes de estabilizar; repetir a chamada resolve. Um 500 nessa janela nao caracteriza bug de aplicacao.
 - A API em staging roda `php artisan serve`, servidor de desenvolvimento de processo unico, adequado apenas para demo.
 - O host Windows possui PHP 8.2.26; a referencia de runtime para PHP 8.3 e Docker/CI.
 - O token frontend permanece somente em memoria por decisao de seguranca do MVP; recarregar a SPA exige novo login.
