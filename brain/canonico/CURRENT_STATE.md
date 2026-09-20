@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-18
+updated: 2026-09-20
 owner: LuanTrindade95
 status: canonico
 ---
@@ -131,13 +131,16 @@ Existe no repositorio:
   - Render Blueprint real `render.yaml` foi materializado e validado
   - Aiven criou `flowcore-valkey` em free tier
   - Aiven bloqueou segundo MySQL free por limite da organizacao; FlowCore usa banco `flowcore_staging` e usuario `flowcore_app` isolados no servico MySQL existente `portfolio`
-  - Netlify permanece pendente ate existirem URLs publicas de API/Reverb
+  - Blueprint aplicado no Render: `flowcore-api` em `https://flowcore-api-urkx.onrender.com` e `flowcore-reverb` em `https://flowcore-reverb.onrender.com`, ambos web services free com `autoDeploy: false`
+  - Netlify no ar em `https://flowcore-luantrindade.netlify.app`, servindo `/config.json` com as URLs publicas de API e Reverb
+  - Smoke externo completo executado contra as URLs publicas: `/health`, `/config.json`, login, catalogo, criacao de solicitacao, inbox, decisao e evento realtime no canal privado
+  - `render.yaml` define `LOG_CHANNEL=stderr` e `LOG_LEVEL=error` para que excecoes apareçam nos Logs do Render
 
 Ainda nao existe:
 
 - Fluxos completos do produto fora do roadmap faseado.
 - Backlog tecnico.
-- Deploy publico/staging real aplicado no Render/Netlify.
+- Escalonamento de SLA em staging, que depende de scheduler ausente no plano free.
 
 ## Contexto Confirmado
 
@@ -181,12 +184,15 @@ Ainda nao existe:
 - A Fase 8 definiu que templates Render/Aiven permanecem documentais ate Gate PO especifico.
 - A Fase 9 definiu que o limite gratuito da Aiven impede segundo MySQL; o banco demo FlowCore deve ficar isolado em `flowcore_staging`, sem operar sobre `defaultdb`.
 - A Fase 9 definiu `flowcore-valkey` como Redis-compatible gerenciado para cache, sessoes, filas e Horizon/Reverb no staging.
+- A Fase 9 definiu que o staging free roda sem Horizon e sem scheduler, com `QUEUE_CONNECTION=sync`, o que desliga o escalonamento de SLA fora do ambiente local.
+- A Fase 9 definiu `LOG_CHANNEL=stderr` como requisito do staging: sem ele a excecao fica em arquivo dentro do container e o diagnostico externo se torna cego.
+- A Fase 9 aceitou as advisories de `@angular/*` 19.2.25 para a demo de staging, conforme `ADR-020`, mantendo `npm run fitness` vermelho no passo `audit`.
 
 ## Em Progresso
 
-Fase 9 em andamento em `main`.
+Nenhuma fase em andamento. A Fase 9 foi concluida em 2026-09-19/20 na branch `feature/phase-9-external-smoke`, com smoke externo reproduzido e aprovado em auditoria adversarial.
 
-Proxima etapa recomendada: aplicar o Blueprint no Render Dashboard, preencher segredos `sync: false`, capturar URLs publicas de API/Reverb e entao criar/configurar o site Netlify.
+Proxima etapa recomendada: definir o backlog tecnico pos-Fase 9, com o upgrade major do Angular como candidato prioritario por causa das advisories aceitas em `ADR-020`.
 
 ## Bloqueios
 
