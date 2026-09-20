@@ -4,9 +4,9 @@ Este documento registra a prontidao de deploy do FlowCore e o estado de staging 
 
 ## Status
 
-- Netlify: configurado como candidato para SPA Angular estatica via `netlify.toml`; site ainda nao criado porque depende das URLs publicas do Render.
-- Render: Blueprint real em `render.yaml` e template de referencia em `deploy/render/render.yaml.example`.
-- Aiven: Valkey free-tier criado para FlowCore; MySQL free-tier ja estava ocupado, entao FlowCore usa banco e usuario isolados no servico MySQL existente.
+- Netlify: site no ar em `https://flowcore-luantrindade.netlify.app` (`200`), servindo `/config.json` com as URLs publicas corretas de API e Reverb.
+- Render: Blueprint real em `render.yaml` aplicado; `flowcore-api` (`https://flowcore-api-urkx.onrender.com`) e `flowcore-reverb` (`wss://flowcore-reverb.onrender.com:443`) no ar e respondendo `/health` com `200`. Smoke externo de login (`POST /api/v1/auth/login`) esta bloqueado com `500 Server Error`; a rota de validacao (sem tocar banco) responde `422` normalmente, entao a falha esta isolada ao acesso a banco/Redis. Diagnostico levado ao humano; nao investigar/alterar credenciais aqui.
+- Aiven: Valkey free-tier criado para FlowCore; MySQL free-tier ja estava ocupado, entao FlowCore usa banco e usuario isolados no servico MySQL existente. Migracao/seed do banco `flowcore_staging` ainda nao confirmados dado o bloqueio acima.
 - Frontend: configuracao runtime carregada de `/config.json`.
 - Backend: `/health` disponivel para health checks de plataforma.
 
@@ -52,32 +52,25 @@ FLOWCORE_REALTIME_FORCE_TLS
 ```text
 base: frontend
 command: npm ci && npm run build:staging
-publish: dist/frontend/browser
+publish: frontend/dist/frontend/browser
 ```
 
 O arquivo tambem define rewrite SPA para `index.html` e `Cache-Control: no-store` para `/config.json`.
 
-Antes de criar site no Netlify, o PO precisa aprovar:
-
-- conta/workspace;
-- dominio ou subdominio;
-- URL publica da API;
-- variaveis `FLOWCORE_*` no escopo de build;
-- smoke externo.
+O site ja foi criado em `https://flowcore-luantrindade.netlify.app` com as variaveis `FLOWCORE_*` de staging aplicadas no escopo de build.
 
 ## Render
 
 O Blueprint `render.yaml` modela:
 
-- API Laravel como web service Docker;
-- Horizon como worker;
-- scheduler como worker free-tier executando `schedule:run` em loop;
-- Reverb como web service separado;
+- `flowcore-api`: API Laravel como web service Docker (`plan: free`), rodando `php artisan serve`;
+- `flowcore-reverb`: Reverb como web service Docker separado (`plan: free`), rodando `php artisan reverb:start`;
+- `QUEUE_CONNECTION=sync`: o free tier nao provisiona Horizon nem worker/scheduler dedicado, entao filas rodam de forma sincrona e o escalonamento de SLA (`workflow:escalate-overdue`) nao executa periodicamente em staging;
 - segredos com `sync: false`;
 - `autoDeploy: false`;
 - banco e Valkey/Redis externos via Aiven.
 
-O deploy Render ainda exige aplicar o Blueprint no Dashboard e preencher os segredos `sync: false` fora do Git.
+O Blueprint ja foi aplicado no Dashboard com os segredos `sync: false` preenchidos fora do Git.
 
 ## Aiven
 

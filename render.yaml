@@ -29,6 +29,10 @@ services:
         value: https://flowcore-luantrindade.netlify.app
       - key: FRONTEND_URLS
         value: https://flowcore-luantrindade.netlify.app
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
       - key: APP_KEY
         sync: false
       - key: DB_CONNECTION
@@ -101,6 +105,10 @@ envVarGroups:
         value: staging
       - key: APP_DEBUG
         value: "false"
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
       - key: APP_KEY
         sync: false
       - key: DB_CONNECTION

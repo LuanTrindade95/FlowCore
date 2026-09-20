@@ -28,9 +28,9 @@ Para a execucao operacional, a estrategia mais coerente e:
    - Exige backend publico configurado antes de virar demo funcional.
 
 3. **Render como candidato para backend full stack**
-   - Melhor encaixe entre as opcoes para API Laravel, workers, scheduler e servicos web.
+   - Melhor encaixe entre as opcoes para API Laravel e servicos web.
    - O free tier e bom para prova de conceito, mas tem spin down em web services ociosos.
-   - No free tier, o template validado modela o scheduler como worker; cron dedicado fica como opcao futura paga/aprovada.
+   - `render.yaml` real modela apenas dois web services (`flowcore-api` e `flowcore-reverb`, ambos `plan: free`); nao ha worker de Horizon nem scheduler dedicado. Filas rodam com `QUEUE_CONNECTION=sync`, e o escalonamento de SLA (`workflow:escalate-overdue`) nao executa periodicamente neste ambiente.
    - Deploy real deve ser aprovado separadamente porque exige conta, Git remoto e variaveis sensiveis.
 
 4. **Aiven como candidato para dados gerenciados**
@@ -72,17 +72,15 @@ Ainda nao deve haver smoke externo completo sem aplicar Render e configurar Netl
 Netlify
   Angular SPA
   build: npm ci && npm run build:staging
-  publish: dist/frontend/browser
+  publish: frontend/dist/frontend/browser
 
 Render
-  Laravel API web service
-  Horizon worker
-  Scheduler worker no free tier
-  Reverb web service
+  flowcore-api: Laravel API web service (QUEUE_CONNECTION=sync, sem worker/scheduler)
+  flowcore-reverb: Reverb web service
 
 Aiven
   MySQL service portfolio / database flowcore_staging / user flowcore_app
-  Valkey service flowcore-valkey for Redis-compatible cache/queue/session
+  Valkey service flowcore-valkey for Redis-compatible cache/session
 ```
 
 ## Variaveis De Ambiente Para Staging
@@ -110,7 +108,7 @@ REDIS_PASSWORD=<secret-or-null>
 REDIS_PORT=<redis-port>
 
 SESSION_DRIVER=redis
-QUEUE_CONNECTION=redis
+QUEUE_CONNECTION=sync
 CACHE_STORE=redis
 BROADCAST_CONNECTION=reverb
 
